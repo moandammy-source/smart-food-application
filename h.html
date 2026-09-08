@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Food Rescue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#134A34;
+    --forest-2:#1B5E3F;
+    --mint:#3FAE72;
+    --mint-light:#E4F4EA;
+    --sky:#2C7BA8;
+    --sky-light:#E4F0F6;
+    --cream:#F6F8F4;
+    --card:#FFFFFF;
+    --ink:#152018;
+    --ink-soft:#5B6660;
+    --line:#E4E9E3;
+    --amber:#DC9A34;
+    --amber-light:#FBF0DD;
+    --coral:#D9683E;
+    --coral-light:#FBE9E1;
+    --radius-lg:22px;
+    --radius-md:16px;
+    --radius-sm:10px;
+    --shadow: 0 14px 30px -14px rgba(19,74,52,0.28);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, #ECF3E9 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, #E6EFF3 0%, transparent 45%),
+      #EEF2EA;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:28px 16px 60px;
+    color:var(--ink);
+  }
+  h1,h2,h3,h4,.display{ font-family:'Sora',sans-serif; }
+  .topbar{
+    width:100%; max-width:1180px;
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:22px; flex-wrap:wrap; gap:14px;
+  }
+  .brandmark{ display:flex; align-items:center; gap:10px; }
+  .brandmark .logo{
+    width:38px; height:38px; border-radius:11px;
+    background:linear-gradient(135deg,var(--forest),var(--mint));
+    display:flex; align-items:center; justify-content:center;
+    color:white; box-shadow:var(--shadow);
+  }
+  .brandmark .name{ font-family:'Sora',sans-serif; font-weight:700; font-size:17px; color:var(--forest); line-height:1.1;}
+  .brandmark .sub{ font-size:11.5px; color:var(--ink-soft); }
+  .mode-switch{
+    display:flex; background:#fff; border:1px solid var(--line); border-radius:999px; padding:4px; gap:4px;
+    box-shadow:0 4px 14px -8px rgba(0,0,0,0.15);
+  }
+  .mode-switch button{
+    border:none; background:transparent; padding:9px 18px; border-radius:999px; font-family:'Sora',sans-serif;
+    font-size:13.5px; font-weight:600; color:var(--ink-soft); cursor:pointer; transition:.18s;
+  }
+  .mode-switch button.active{ background:var(--forest); color:#fff; }
+  .mode-switch button:hover:not(.active){ color:var(--forest); }
+
+  .stage{ width:100%; display:flex; justify-content:center; }
+
+  /* ---------- Customer phone frame ---------- */
+  .device{
+    background:#0E1712; border-radius:46px; padding:14px;
+    box-shadow: 0 40px 70px -30px rgba(10,30,20,0.45);
+  }
+  .device.hidden{display:none;}
+  .screen-wrap{
+    width:376px; height:780px; background:var(--cream); border-radius:34px; overflow:hidden;
+    position:relative; display:flex; flex-direction:column;
+  }
+  .notch{
+    position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:120px; height:24px; background:#0E1712; border-radius:0 0 16px 16px; z-index:50;
+  }
+  .statusbar{ height:38px; flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 26px; font-size:12px; font-weight:600; color:var(--ink); }
+  .screen{ flex:1; overflow-y:auto; position:relative; }
+  .screen::-webkit-scrollbar{ width:0; }
+  .bottomnav{
+    flex:0 0 auto; display:flex; border-top:1px solid var(--line); background:#fff;
+    padding:9px 6px 14px;
+  }
+  .bottomnav button{
+    flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px;
+    color:var(--ink-soft); font-size:10.5px; font-weight:600; cursor:pointer; padding:4px 0;
+  }
+  .bottomnav button.active{ color:var(--forest); }
+  .bottomnav button svg{ stroke:var(--ink-soft); }
+  .bottomnav button.active svg{ stroke:var(--forest); }
+
+  /* ---------- Seller dashboard frame ---------- */
+  .device.seller{
+    background:#0E1712; border-radius:20px; padding:10px; width:min(1180px,94vw);
+  }
+  .seller .screen-wrap{
+    width:100%; height:760px; border-radius:12px; flex-direction:row;
+  }
+  .seller .statusbar, .seller .notch{ display:none; }
+  .sidebar{
+    width:230px; flex:0 0 auto; background:var(--forest); color:#fff; display:flex; flex-direction:column;
+    padding:22px 14px;
+  }
+  .sidebar .sb-logo{ display:flex; align-items:center; gap:9px; padding:0 8px 22px; }
+  .sidebar .sb-logo .logo{ width:30px;height:30px;border-radius:8px; background:rgba(255,255,255,0.15); display:flex;align-items:center;justify-content:center; }
+  .sidebar .sb-logo .txt{ font-family:'Sora',sans-serif; font-weight:700; font-size:14.5px; }
+  .sidebar nav{ display:flex; flex-direction:column; gap:3px; flex:1; }
+  .sidebar nav button{
+    display:flex; align-items:center; gap:11px; background:none; border:none; color:rgba(255,255,255,0.72);
+    padding:11px 12px; border-radius:11px; font-family:'Inter',sans-serif; font-size:13.5px; font-weight:600;
+    cursor:pointer; text-align:left;
+  }
+  .sidebar nav button svg{ stroke:rgba(255,255,255,0.72); }
+  .sidebar nav button.active{ background:rgba(255,255,255,0.14); color:#fff; }
+  .sidebar nav button.active svg{ stroke:#fff; }
+  .sidebar .sb-foot{ display:flex; align-items:center; gap:9px; padding:12px; border-top:1px solid rgba(255,255,255,0.14); }
+  .sidebar .sb-foot .av{ width:32px;height:32px;border-radius:9px; background:var(--mint); display:flex;align-items:center;justify-content:center; font-weight:700; font-size:13px;}
+  .sidebar .sb-foot .info{ line-height:1.2; }
+  .sidebar .sb-foot .info b{ font-size:12.5px; display:block; }
+  .sidebar .sb-foot .info span{ font-size:11px; color:rgba(255,255,255,0.6); }
+  .seller .screen{ background:var(--cream); }
+
+  /* ---------- shared bits ---------- */
+  .px{ padding-left:20px; padding-right:20px; }
+  .btn{
+    border:none; border-radius:999px; font-family:'Sora',sans-serif; font-weight:600; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:.15s;
+  }
+  .btn-primary{ background:var(--forest); color:#fff; padding:14px 22px; font-size:14.5px; width:100%; box-shadow:0 10px 20px -10px rgba(19,74,52,0.5); }
+  .btn-primary:hover{ background:var(--forest-2); }
+  .btn-ghost{ background:#fff; border:1.5px solid var(--line); color:var(--ink); padding:13px 22px; font-size:14px; width:100%; }
+  .btn-sm{ padding:9px 16px; font-size:12.5px; border-radius:999px; }
+  .btn-mint{ background:var(--mint-light); color:var(--forest); }
+  .card{ background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--line); }
+  .pill{ display:inline-flex; align-items:center; gap:5px; border-radius:999px; padding:4px 10px; font-size:11px; font-weight:700; }
+  .pill-mint{ background:var(--mint-light); color:var(--forest); }
+  .pill-amber{ background:var(--amber-light); color:#8A5D18; }
+  .pill-sky{ background:var(--sky-light); color:var(--sky); }
+  .pill-coral{ background:var(--coral-light); color:var(--coral); }
+  .tag-cat{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:9px 6px; display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; font-weight:600; color:var(--ink); cursor:pointer;}
+  .foodthumb{
+    border-radius:var(--radius-md) var(--radius-md) 0 0; height:118px; display:flex; align-items:center; justify-content:center; font-size:40px;
+    position:relative; overflow:hidden;
+  }
+  .foodthumb .deco{ position:absolute; inset:0; opacity:.5; }
+  .clickable{ cursor:pointer; }
+  ::selection{ background:var(--mint-light); }
+  input, select{
+    width:100%; border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; font-family:'Inter'; font-size:13.5px;
+    background:#fff; color:var(--ink); outline:none;
+  }
+  input:focus, select:focus{ border-color:var(--mint); }
+  label{ font-size:12px; font-weight:600; color:var(--ink-soft); display:block; margin-bottom:6px; }
+  .fade-in{ animation:fadein .28s ease; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+  .skeleton{ background:linear-gradient(90deg,#edf1ed 25%,#f8faf7 50%,#edf1ed 75%); background-size:200% 100%; animation:skeleton-shimmer 1.15s ease-in-out infinite; border-radius:10px; }
+  @keyframes skeleton-shimmer{ from{background-position:200% 0;} to{background-position:-200% 0;} }
+  .filter-sheet-backdrop{ position:absolute; inset:0; z-index:20; background:rgba(21,32,24,.28); display:flex; align-items:flex-end; }
+  .filter-sheet{ width:100%; background:#fff; border-radius:22px 22px 0 0; padding:18px 20px 24px; box-shadow:0 -14px 30px -18px rgba(19,74,52,.45); animation:sheet-up .22s ease; }
+  @keyframes sheet-up{ from{transform:translateY(100%);} to{transform:translateY(0);} }
+  .filter-option{ border:1px solid var(--line); background:#fff; border-radius:999px; padding:7px 10px; font-size:11px; font-weight:600; cursor:pointer; color:var(--ink); }
+  .filter-option.active{ background:var(--mint-light); border-color:var(--mint); color:var(--forest); }
+  .screen-actionbar{ position:sticky; bottom:0; z-index:8; background:#fff; border-top:1px solid var(--line); padding:14px 20px 18px; }
+  .snackbar{ position:fixed; left:50%; bottom:24px; z-index:100; transform:translate(-50%,16px); background:var(--ink); color:#fff; border-radius:999px; padding:11px 16px; font-size:12px; font-weight:600; opacity:0; pointer-events:none; transition:opacity .18s, transform .18s; white-space:nowrap; box-shadow:var(--shadow); }
+  .snackbar.show{ opacity:1; transform:translate(-50%,0); }
+  .footnote{ text-align:center; font-size:11.5px; color:var(--ink-soft); margin-top:18px; max-width:420px; }
+  a.link{ color:var(--forest); font-weight:600; text-decoration:none; }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brandmark">
+      <div class="logo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div class="name">Smart Food Rescue</div>
+        <div class="sub">Interactive prototype · click around</div>
+      </div>
+    </div>
+    <div class="mode-switch">
+      <button id="btn-mode-customer" class="active" onclick="setMode('customer')">Customer App</button>
+      <button id="btn-mode-seller" onclick="setMode('seller')">Seller Dashboard</button>
+    </div>
+  </div>
+
+  <div class="stage">
+    <!-- CUSTOMER DEVICE -->
+    <div id="device-customer" class="device">
+      <div class="screen-wrap">
+        <div class="notch"></div>
+        <div class="statusbar">
+          <span>9:41</span>
+          <span style="display:flex; gap:5px; align-items:center;">
+            <svg width="15" height="11" viewBox="0 0 16 12" fill="none"><rect x="0" y="7" width="3" height="5" rx="0.5" fill="#152018"/><rect x="4.5" y="4.5" width="3" height="7.5" rx="0.5" fill="#152018"/><rect x="9" y="2" width="3" height="10" rx="0.5" fill="#152018"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5" fill="#152018"/></svg>
+            <svg width="17" height="11" viewBox="0 0 22 12" fill="none"><rect x="0.5" y="0.5" width="18" height="11" rx="2.5" stroke="#152018"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#152018"/><rect x="19.5" y="4" width="2" height="4" rx="1" fill="#152018"/></svg>
+          </span>
+        </div>
+        <div id="customer-screen" class="screen"></div>
+        <div id="customer-nav" class="bottomnav"></div>
+      </div>
+    </div>
+
+    <!-- SELLER DEVICE -->
+    <div id="device-seller" class="device seller hidden">
+      <div class="screen-wrap">
+        <div class="sidebar">
+          <div class="sb-logo">
+            <div class="logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 6 6 9 6 13a6 6 0 0012 0c0-4-2-7-6-11z" stroke="white" stroke-width="2"/></svg></div>
+            <div class="txt">Seller Console</div>
+          </div>
+          <nav id="seller-nav"></nav>
+          <div class="sb-foot">
+            <div class="av">GW</div>
+            <div class="info"><b>Golden Wok Kitchen</b><span>Verified seller</span></div>
+          </div>
+        </div>
+        <div id="seller-screen" class="screen"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="footnote">Prototype for evaluation — food photos are represented with simple illustrated icons rather than stock photography, per the brief's "simple illustrations" direction. All data shown is sample data.</p>
+  <div id="snackbar" class="snackbar" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/customer-pages.js"></script>
+<script src="js/seller-pages.js"></script>
+<script src="js/interactions.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>
