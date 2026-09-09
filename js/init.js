@@ -11,3 +11,4 @@ function upgradeRowItems(){
 const _origRenderCustomer = renderCustomer;
 renderCustomer = function(animate=true){ _origRenderCustomer(animate); upgradeRowItems(); renderOrderQr(); };
 renderCustomer();
+loadDonationData();

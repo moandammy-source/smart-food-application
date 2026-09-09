@@ -82,6 +82,43 @@ function toggleFavorite(id){
   showSnackbar(state.favorites[id]?'Added to favorites':'Removed from favorites');
 }
 
+async function loadDonationData(){
+  state.donationLoading=true;
+  try{
+    const response=await fetch('/api/donations',{cache:'no-store'});
+    if(!response.ok) throw new Error('Unable to load donation data.');
+    state.donationData=await response.json();
+    state.donationError='';
+  }catch(error){
+    state.donationError=error.message||'Unable to load donation data.';
+  }finally{
+    state.donationLoading=false;
+    renderCustomer(false);
+  }
+}
+
+async function confirmDonation(foodId){
+  const food=(state.donationData?.foods||[]).find(item=>item.id===foodId);
+  if(!food?.eligible) return;
+  const points=Math.max(5,Math.round(food.price/10));
+  if(!window.confirm(`Are you sure you want to donate this food? You will earn ${points} points.`)) return;
+  state.donatingFoodId=foodId;
+  state.donationError='';
+  renderCustomer(false);
+  try{
+    const response=await fetch('/api/donations',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({foodId})});
+    const payload=await response.json();
+    if(!response.ok) throw new Error(payload.error||'Donation failed.');
+    state.donationData=payload;
+    showSnackbar(payload.message);
+  }catch(error){
+    state.donationError=error.message||'Donation failed.';
+  }finally{
+    state.donatingFoodId=null;
+    renderCustomer(false);
+  }
+}
+
 function showSnackbar(message){
   const snackbar=document.getElementById('snackbar');
   if(!snackbar) return;
@@ -93,13 +130,33 @@ function showSnackbar(message){
 
 function startPayment(){
   state.orderData={
-    orderId:'SFR-88213',
-    items:cartItems().map(({food,qty})=>({name:food.name,qty,price:food.price})),
+    orderId:`SFR-${Date.now().toString().slice(-8)}`,
+    items:cartItems().map(({food,qty})=>({id:food.id,name:food.name,qty,price:food.price})),
     total:Math.max(cartTotal()-(state.couponApplied?20:0)-(state.pointsApplied?15:0)+5,0),
     pickup:'Today, 18:30–19:30',
     location:'Golden Wok Kitchen'
   };
+  state.orderPoints=null;
   go('payment');
+}
+
+async function completeOrderPayment(){
+  if(state.orderRewardLoading||!state.orderData) return;
+  state.orderRewardLoading=true;
+  try{
+    const response=await fetch('/api/donations',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'order',orderId:state.orderData.orderId})});
+    const payload=await response.json();
+    if(!response.ok) throw new Error(payload.error||'Unable to apply order points.');
+    state.orderPoints=payload.orderReward.pointsEarned;
+    state.donationData=payload;
+    go('confirmation');
+  }catch(error){
+    state.orderPoints=0;
+    state.donationError=error.message||'Unable to apply order points.';
+    go('confirmation');
+  }finally{
+    state.orderRewardLoading=false;
+  }
 }
 
 function renderOrderQr(){

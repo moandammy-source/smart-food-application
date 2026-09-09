@@ -65,6 +65,12 @@ let state = {
   orderData:null,
   sellerScreen:'dashboard',
   uploadStep:0,
+  donationData:null,
+  donationLoading:false,
+  donationError:'',
+  donatingFoodId:null,
+  orderPoints:null,
+  orderRewardLoading:false,
 };
 
 function money(n){ return '฿'+n.toLocaleString(); }
@@ -108,7 +114,7 @@ function renderCustomer(animate=true){
     splash: screenSplash, login: screenLogin, home: screenHome, search: screenSearch,
     foodDetail: screenFoodDetail, cart: screenCart, checkout: screenCheckout,
     payment: screenPayment, confirmation: screenConfirmation, tracking: screenTracking,
-    profile: screenProfile, rewards: screenRewards, sustainability: screenSustainability,
+    profile: screenProfile, rewards: screenRewards, donate: screenDonate, sustainability: screenSustainability,
     support: screenSupport, favorites: screenFavorites,
   };
   el.innerHTML = `<div class="${animate?'fade-in':''}">${(screens[state.screen]||screenHome)()}</div>`;

@@ -337,7 +337,7 @@ function screenCheckout(){
 
 /* ---- Payment (processing) ---- */
 function screenPayment(){
-  setTimeout(()=>{ if(state.screen==='payment'){ go('confirmation'); } }, 1400);
+  setTimeout(()=>{ if(state.screen==='payment'){ completeOrderPayment(); } }, 1400);
   return `
   <div style="height:700px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 40px;">
     <div style="width:64px;height:64px; border:4px solid var(--mint-light); border-top-color:var(--forest); border-radius:50%; animation:spin 0.9s linear infinite;"></div>
@@ -367,6 +367,7 @@ function screenConfirmation(){
       ${items.map(({food,qty})=>`<div style="display:flex; justify-content:space-between; font-size:12.5px;"><span>${qty}× ${food.name}</span><span style="color:var(--ink-soft);">${food.store}</span></div>`).join('') || `<div style="font-size:12.5px;">1× ${first.name}</div>`}
       <div style="border-top:1px dashed var(--line); padding-top:8px; display:flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-soft);">${icon('clock',14)} Pickup today, 18:30–19:30 · ${first.store}</div>
     </div>
+    <div class="card" style="margin-top:14px; padding:13px; background:${state.orderPoints>0?'var(--mint-light)':'var(--amber-light)'}; color:${state.orderPoints>0?'var(--forest)':'#8A5D18'}; font-size:13px; font-weight:700;">${state.orderPoints>0?`Order received! You earned ${state.orderPoints} points.`:'Order received. Points could not be added yet.'}</div>
 
     <button class="btn btn-primary" style="margin-top:20px;" onclick="state.cart={}; go('tracking')">Track my order</button>
     <button class="btn btn-ghost" style="margin-top:10px;" onclick="state.cart={}; go('home')">Back to home</button>
@@ -427,7 +428,7 @@ function screenTracking(){
 function screenProfile(){
   const rows = [
     ['gift','Rewards & points','rewards'],
-    ['leaf','Sustainability impact','sustainability'],
+    ['gift','Donate Food','donate'],
     ['heart','Favorites','favorites'],
     ['tag','Coupons', null],
     ['settings','Account settings', null],
@@ -444,7 +445,7 @@ function screenProfile(){
     </div>
   </div>
   <div class="px" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:18px;">
-    ${[['320','points'],['12','orders'],['4.9','rating']].map(([v,l])=>`
+    ${[[state.donationData?state.donationData.totalPoints:'—','points'],['12','orders'],['4.9','rating']].map(([v,l])=>`
     <div class="card" style="padding:12px; text-align:center;"><div style="font-weight:800; font-size:16px; color:var(--forest); font-family:'Sora';">${v}</div><div style="font-size:10.5px; color:var(--ink-soft); margin-top:2px;">${l}</div></div>`).join('')}
   </div>
   <div class="px" style="display:flex; flex-direction:column; gap:8px; margin-top:18px; padding-bottom:20px;">
@@ -459,6 +460,44 @@ function screenProfile(){
     </div>
   </div>
   `;
+}
+
+/* ---- Donate food ---- */
+function screenDonate(){
+  const data=state.donationData;
+  const donatedIds=new Set((data?.donations||[]).map(d=>d.foodId));
+  const donationFoods=data?.foods||[];
+  return `
+  ${header('Donate Food', "go('profile')")}
+  <div class="px" style="padding-bottom:20px;">
+    <div class="card" style="background:linear-gradient(120deg,var(--forest),#1F6E4A); border:none; padding:16px; color:#fff; margin-top:4px;">
+      <div style="font-size:12px; opacity:.85;">Total points</div>
+      <div style="font-size:27px; font-weight:800; font-family:'Sora'; margin-top:2px;">${data?data.totalPoints:'—'} pts</div>
+      <div style="font-size:11.5px; opacity:.85; margin-top:4px;">Give eligible food to animals and earn points.</div>
+    </div>
+    ${state.donationError?`<div class="card" style="margin-top:12px; padding:12px; color:var(--coral); background:var(--coral-light); font-size:12px;">${state.donationError}</div>`:''}
+    <h3 style="font-size:13.5px; margin-top:18px;">Available food</h3>
+    ${state.donationLoading&&!data?`<div style="padding:28px 0; text-align:center; color:var(--ink-soft); font-size:12px;">Loading donation options…</div>`:
+      donationFoods.map(food=>{
+        const donated=donatedIds.has(food.id)||food.alreadyDonated;
+        const eligible=food.eligible&&!donated;
+        const points=Math.max(5,Math.round(food.price/10));
+        const displayFood=foods.find(f=>f.id===food.id);
+        return `<div class="card" style="display:flex; gap:11px; padding:11px; margin-top:10px; align-items:center; opacity:${eligible?'1':'.72'};">
+          <div class="foodthumb" style="background:${displayFood?.grad||'var(--mint-light)'}; width:58px;height:58px;border-radius:12px; font-size:25px; flex:0 0 auto;">${displayFood?.emoji||'🍽️'}</div>
+          <div style="flex:1; min-width:0;">
+            <div style="font-size:12.5px; font-weight:700; line-height:1.25;">${food.name}</div>
+            <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">${eligible?`Eligible · +${points} pts`:(donated?'Already donated':'Below eligibility threshold')}</div>
+          </div>
+          ${eligible?`<button class="btn btn-primary btn-sm" style="width:auto; padding:9px 12px;" ${state.donatingFoodId===food.id?'disabled':''} onclick="confirmDonation(${food.id})">${state.donatingFoodId===food.id?'…':'Donate'}</button>`:`<span class="pill ${donated?'pill-mint':'pill-amber'}">${donated?'Done':'Not eligible'}</span>`}
+        </div>`;
+      }).join('')||`<div style="padding:22px 0; color:var(--ink-soft); font-size:12px;">No donation options available.</div>`}
+    <h3 style="font-size:13.5px; margin-top:20px;">Donation history</h3>
+    ${(data?.donations||[]).map(d=>`<div class="card" style="padding:12px; margin-top:10px;">
+      <div style="display:flex; justify-content:space-between; gap:8px;"><strong style="font-size:12.5px;">${d.foodName}</strong><span class="pill pill-mint">${d.status}</span></div>
+      <div style="display:flex; justify-content:space-between; gap:8px; margin-top:7px; font-size:11px; color:var(--ink-soft);"><span>Qty ${d.quantity} · ${new Date(d.donationDate).toLocaleDateString()}</span><b style="color:var(--forest);">+${d.pointsEarned} pts</b></div>
+    </div>`).join('')||`<div style="padding:12px 0; color:var(--ink-soft); font-size:12px;">Your completed donations will appear here.</div>`}
+  </div>`;
 }
 
 /* ---- Rewards ---- */
