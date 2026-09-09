@@ -2,8 +2,8 @@
 function screenSplash(){
   return `
   <div style="height:742px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(160deg,var(--forest) 0%, #1F6E4A 55%, var(--mint) 130%); color:#fff; text-align:center; padding:0 40px;">
-    <div style="width:78px;height:78px;border-radius:22px;background:rgba(255,255,255,0.16); display:flex;align-items:center;justify-content:center; margin-bottom:22px;">
-      ${icon('leaf',38,'#fff')}
+    <div style="width:78px;height:78px;border-radius:50%;background:#fff;overflow:hidden; display:flex;align-items:center;justify-content:center; margin-bottom:22px;">
+      <img src="/logo.png" alt="" style="width:100%;height:100%;object-fit:contain;display:block;" />
     </div>
     <div class="display" style="font-size:26px; font-weight:800; letter-spacing:-.02em;">Smart Food Rescue</div>
     <div style="margin-top:12px; font-size:14.5px; line-height:1.5; opacity:.92;">Save Food. Save Money.<br>Save Our Future.</div>

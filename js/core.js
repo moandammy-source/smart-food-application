@@ -30,6 +30,9 @@ const I = {
   bolt:`<path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/>`,
 };
 function icon(name, size=20, stroke='var(--ink-soft)', fill='none'){
+  if(name==='leaf'){
+    return `<img src="/logo.png" alt="" width="${size}" height="${size}" style="display:block; object-fit:contain;" />`;
+  }
   return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${I[name]||''}</svg>`;
 }
 
