@@ -35,7 +35,7 @@ type FoodRecord = {
 };
 
 const USER_ID = 'demo-user-nara';
-const ELIGIBILITY_THRESHOLD = 75;
+const ELIGIBILITY_THRESHOLD = 68;
 const storePath = path.join(process.cwd(), 'data', 'donations.json');
 const foods: FoodRecord[] = [
   { id: 1, name: 'Roast Chicken Rice Box', qty: 6, price: 69, donationScore: 92 },
@@ -44,6 +44,9 @@ const foods: FoodRecord[] = [
   { id: 4, name: 'Mixed Veg & Fruit Crate', qty: 10, price: 79, donationScore: 88 },
   { id: 5, name: 'Weekend Brunch Buffet Box', qty: 5, price: 129, donationScore: 72 },
   { id: 6, name: 'Protein Grain Bowl', qty: 7, price: 69, donationScore: 81 },
+  { id: 7, name: 'Fresh Fruit & Veg Basket', qty: 8, price: 85, donationScore: 69 },
+  { id: 8, name: 'Healthy Rice Bowl with Tofu', qty: 6, price: 75, donationScore: 70 },
+  { id: 9, name: 'Chicken & Sweet Potato Pack', qty: 4, price: 92, donationScore: 67 },
 ];
 
 let writeQueue = Promise.resolve();

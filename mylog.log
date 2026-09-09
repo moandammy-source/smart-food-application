@@ -1,0 +1,16 @@
+[InstallShield Silent]
+Version=v7.00
+File=Log File
+[ResponseResult]
+ResultCode=0
+[Application]
+Name=Realtek Ethernet Controller Driver
+Version=11.3.1022.2021
+Company=Realtek
+Lang=0409
+<img src="Logo.png" alt="โลโก้บริษัท" class="logo">
+c:\Users\moand\Downloads\Logo.png
+├── public\
+│   └── C:\Smart Food\public\smart-food-logo.png
+├── src\
+└── C:\Smart Food\public\Logo.png

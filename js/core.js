@@ -44,10 +44,17 @@ const foods = [
   {id:4, name:"Mixed Veg & Fruit Crate", store:"FreshMart Supermarket", cat:"Grocery", emoji:"🥦", image:"https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#DCEFD8,#8FCB8A)", original:220, price:79, qty:10, distance:1.4, rating:4.5, pickup:"20:00–21:00", prep:"Sorted today", best:"In 2–3 days", allergens:[], ingredients:"Seasonal vegetables and fruit nearing best-by date, still firm and edible.", storeRating:4.5, reviews:501, safety:"Cold-chain maintained; items visually inspected before listing."},
   {id:5, name:"Weekend Brunch Buffet Box", store:"Riverside Grand Hotel", cat:"Hotel", emoji:"🍳", image:"https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#E3E9F2,#AEC2E0)", original:390, price:129, qty:5, distance:2.1, rating:4.9, pickup:"14:30–15:30", prep:"Prepared 10:00 today", best:"Today, 17:00", allergens:["Egg","Dairy","Gluten"], ingredients:"Assorted brunch dishes from the buffet line, portioned and sealed.", storeRating:4.9, reviews:76, safety:"Held under buffet heat-lamp compliance, then chilled at 11:30."},
   {id:6, name:"Protein Grain Bowl", store:"Basil & Bean Café", cat:"Healthy Food", emoji:"🥗", image:"https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#DDEDD0,#A9D48A)", original:165, price:69, qty:7, distance:0.3, rating:4.6, pickup:"18:00–19:00", prep:"Made today, 11:30", best:"Today, 20:00", allergens:["Soy"], ingredients:"Quinoa, grilled chicken, edamame, roasted pumpkin, tahini dressing.", storeRating:4.7, reviews:98, safety:"Chilled below 4°C, sealed container."},
+  {id:7, name:"Fresh Fruit & Veg Basket", store:"Farm Lane Market", cat:"Grocery", emoji:"🥕", image:"https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#DFF2D0,#BEE3A0)", original:210, price:89, qty:9, distance:1.7, rating:4.6, pickup:"19:30–20:30", prep:"Packed today, 12:00", best:"Tomorrow, 10:00", allergens:[], ingredients:"A colorful mix of fresh vegetables, citrus, apples, and herbs packed for a local rescue run.", storeRating:4.6, reviews:121, safety:"Stored in a chilled produce crate and checked before pickup."},
+  {id:8, name:"Healthy Rice Bowl with Tofu", store:"Basil & Bean Café", cat:"Healthy Food", emoji:"🥬", image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#E7F2D9,#BADB9B)", original:175, price:72, qty:6, distance:1.1, rating:4.5, pickup:"18:30–19:30", prep:"Prepared today, 13:00", best:"Today, 19:00", allergens:["Soy"], ingredients:"Brown rice, tofu, greens, roasted vegetables, and a light sesame dressing.", storeRating:4.5, reviews:115, safety:"Prepared fresh, sealed, and kept chilled for delivery."},
+  {id:9, name:"Chicken & Sweet Potato Pack", store:"Golden Wok Kitchen", cat:"Meals", emoji:"🐾", image:"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#F4E7CD,#D8B775)", original:230, price:95, qty:5, distance:1.9, rating:4.7, pickup:"20:00–21:00", prep:"Cooked this morning", best:"Today, 22:00", allergens:["Gluten","Soy"], ingredients:"Tender chicken, roasted sweet potato, herbs, and steamed vegetables in a ready-to-serve meal pack.", storeRating:4.7, reviews:143, safety:"Prepared in a certified kitchen and packed for immediate pickup."},
 ];
 const categories = [
-  {name:"Meals", emoji:"🍛"},{name:"Bakery", emoji:"🍞"},{name:"Café", emoji:"☕"},
-  {name:"Grocery", emoji:"🥦"},{name:"Hotel", emoji:"🍳"},{name:"Healthy Food", emoji:"🥗"},
+  {name:"Meals", image:"https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=85"},
+  {name:"Bakery", image:"https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=85"},
+  {name:"Café", image:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85"},
+  {name:"Grocery", image:"https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=85"},
+  {name:"Hotel", image:"https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=85"},
+  {name:"Healthy Food", image:"https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=85"},
 ];
 
 /* ============ STATE ============ */
@@ -111,7 +118,6 @@ function renderCustomer(animate=true){
     nav.innerHTML = `
       ${navBtn('home','home','Home')}
       ${navBtn('search','search','Food')}
-      ${navBtn('donate','gift','Donate')}
       ${navBtn('rewards','star','Points')}
       ${navBtn('profile','user','Profile')}
     `;

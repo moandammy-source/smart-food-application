@@ -1,28 +1,22 @@
 {
   "userId": "demo-user-nara",
-  "totalPoints": 347,
+  "totalPoints": 337,
   "donations": [
     {
-      "id": "DON-1788973477296",
+      "id": "DON-1788992551796",
       "foodId": 1,
       "foodName": "Roast Chicken Rice Box",
       "quantity": 1,
-      "donationDate": "2026-09-09T17:04:37.296Z",
+      "donationDate": "2026-09-09T22:22:31.796Z",
       "pointsEarned": 7,
       "status": "completed"
     }
   ],
   "orders": [
     {
-      "orderId": "SFR-73426792",
+      "orderId": "SFR-93958146",
       "pointsEarned": 10,
-      "orderDate": "2026-09-09T17:03:48.210Z",
-      "status": "completed"
-    },
-    {
-      "orderId": "SFR-73079520",
-      "pointsEarned": 10,
-      "orderDate": "2026-09-09T16:58:01.081Z",
+      "orderDate": "2026-09-09T22:45:59.560Z",
       "status": "completed"
     }
   ]

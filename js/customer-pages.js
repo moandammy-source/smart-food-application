@@ -20,7 +20,7 @@ function screenSplash(){
 function screenLogin(){
   return `
   <div class="px" style="padding-top:30px;">
-    <div style="width:52px;height:52px;border-radius:15px;background:var(--mint-light); display:flex;align-items:center;justify-content:center; margin-bottom:18px;"><img src="/smart-food-logo.png" alt="โลโก้บริษัท" class="logo" style="width:42px;height:42px;object-fit:contain;"></div>
+    <div style="width:84px;height:84px;border-radius:18px;background:var(--mint-light); display:flex;align-items:center;justify-content:center; margin-bottom:18px;"><img src="/smart-food-logo.png" alt="โลโก้บริษัท" class="logo" style="width:62px;height:62px;object-fit:contain;"></div>
     <h2 style="font-size:22px;">Welcome back</h2>
     <p style="color:var(--ink-soft); font-size:13.5px; margin-top:6px;">Log in to find surplus food nearby.</p>
     <div style="margin-top:24px; display:flex; flex-direction:column; gap:14px;">
@@ -49,27 +49,50 @@ function screenHome(){
   <div style="padding:16px 20px 10px; display:flex; align-items:center; justify-content:space-between;">
     <div>
       <div style="display:flex; align-items:center; gap:5px; color:var(--ink-soft); font-size:12px; font-weight:600;">${icon('map',14,'var(--forest)')} Sukhumvit, Bangkok</div>
-      <div style="font-size:19px; font-weight:700; font-family:'Sora'; margin-top:2px;">Hi Nara 👋</div>
+      <div style="font-size:19px; font-weight:700; font-family:'Sora'; margin-top:2px;">Hi Nara</div>
     </div>
     <button onclick="go('profile')" style="width:40px;height:40px;border-radius:12px;background:var(--mint-light); border:none; display:flex; align-items:center; justify-content:center; position:relative;">
       ${icon('bell',19,'var(--forest)')}
       <span style="position:absolute; top:-3px; right:-3px; width:8px; height:8px; border-radius:50%; background:var(--coral); border:2px solid var(--cream);"></span>
     </button>
   </div>
-  <div class="px" style="margin-top:10px;">
-    <div class="pet-banner">
-      <div style="font-size:11px;font-weight:800;color:var(--forest);text-transform:uppercase;">A little kindness goes a long way</div>
-      <div class="pet-banner-title" style="font-size:22px;margin-top:3px;">Rescue Food, Feed Lives</div>
-      <div style="font-size:12px;color:var(--ink-soft);margin-top:5px;max-width:235px;line-height:1.45;">Good food deserves a second chance, and animals deserve a full tummy.</div>
+  <div class="px" style="margin-top:8px;">
+    <div class="pet-banner hero-panel" style="padding:12px 16px 14px; min-height:138px; background:linear-gradient(135deg,#edf8ed,#dfeee0 45%,#eedec4 100%);">
+      <span class="hero-decor hero-decor--leaf hero-decor--leaf-1">❁</span>
+      <span class="hero-decor hero-decor--heart hero-decor--heart-1">♥</span>
+      <span class="hero-decor hero-decor--paw hero-decor--paw-1">🐾</span>
+      <span class="hero-decor hero-decor--leaf hero-decor--leaf-2">❁</span>
+      <span class="hero-decor hero-decor--heart hero-decor--heart-2">♥</span>
+      <img src="https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=1200&q=80" alt="Cute cat in a garden" style="opacity:0.98; object-position:center; filter:saturate(1.2) contrast(1.08) brightness(1.02);" />
+      <div class="pet-banner-overlay" style="background:linear-gradient(90deg, rgba(237,248,237,0.84) 0%, rgba(237,248,237,0.5) 42%, rgba(20,32,24,0.12) 100%);"></div>
+      <div class="hero-copy" style="position:relative; z-index:1;">
+        <div class="hero-badges">
+          <span class="mini-pill mini-pill--soft">Freshly rescued</span>
+          <span class="mini-pill mini-pill--soft">Verified kitchens</span>
+        </div>
+        <div style="font-size:11px;font-weight:800;color:var(--forest);text-transform:uppercase;letter-spacing:.06em;">A LITTLE KINDNESS GOES A LONG WAY</div>
+        <div class="pet-banner-title" style="font-size:25px;margin-top:4px;line-height:1.06;font-family:'Sora';font-weight:800;color:var(--forest);">Rescue Food, Feed Lives</div>
+        <div class="hero-subtext">Good food deserves a second chance, and animals deserve a full tummy.</div>
+        <div class="hero-footrow">
+          <span class="mini-pill" style="background:rgba(255,255,255,0.72);">♥ pets</span>
+          <span class="mini-pill" style="background:rgba(255,255,255,0.72);">+20 pts</span>
+        </div>
+      </div>
     </div>
-    <div class="card points-card" style="margin-top:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
-      <div style="width:42px;height:42px;border-radius:15px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px;">⭐</div>
-      <div style="flex:1;"><div style="font-size:11px;opacity:.82;">Your total points</div><div style="font-size:23px;font-weight:900;font-family:'Nunito';">${totalPoints} <span style="font-size:12px;">pts</span></div></div>
-      <button class="btn btn-sm" style="background:#fff;color:var(--forest);" onclick="go('rewards')">View</button>
+    <div class="card points-card" style="margin-top:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#ffffff,#f4faf4); border-color:rgba(47,143,93,0.15); box-shadow:0 16px 28px -18px rgba(19,74,52,0.3);">
+      <span class="points-spark points-spark--1">✦</span>
+      <span class="points-spark points-spark--2">✦</span>
+      <span class="points-spark points-spark--3">✦</span>
+      <div class="points-coin">${icon('gift',18,'var(--forest)')}</div>
+      <div class="points-copy">
+        <div class="points-title">Rewards & points</div>
+        <div class="points-number">${totalPoints}<small>pts</small></div>
+      </div>
+      <button class="btn btn-sm points-cta" onclick="go('rewards')">View</button>
     </div>
   </div>
   <div class="px" style="margin-top:6px;">
-    <div onclick="go('search')" class="clickable" style="display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 14px;">
+    <div onclick="go('search')" class="clickable search-shell" style="display:flex; align-items:center; gap:10px; border-radius:16px; padding:12px 14px;">
       ${icon('search',18,'var(--ink-soft)')}<span style="color:var(--ink-soft); font-size:13.5px;">Search food, store, category…</span>
     </div>
   </div>
@@ -77,8 +100,8 @@ function screenHome(){
   <div class="px" style="margin-top:20px; display:flex; align-items:center; justify-content:space-between;">
     <h3 style="font-size:14.5px;">Browse by category</h3>
   </div>
-  <div class="px" style="display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:10px;">
-    ${categories.map(c=>`<div class="tag-cat" onclick="go('search',{activeCat:'${c.name}'})"><span style="font-size:18px;">${c.emoji}</span>${c.name}</div>`).join('')}
+  <div class="px" style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px;">
+    ${categories.map(c=>`<div class="tag-cat category-tile" onclick="go('search',{activeCat:'${c.name}'})"><img src="${c.image}" alt="${c.name}" loading="lazy" style="width:100%;height:48px;border-radius:10px;object-fit:cover;display:block;" /><span style="font-size:11px; font-weight:700;">${c.name}</span></div>`).join('')}
   </div>
 
   <div class="px" style="margin-top:22px; display:flex; align-items:center; justify-content:space-between;">
@@ -97,40 +120,50 @@ function screenHome(){
   `;
 }
 function foodCardSm(f){
-  return `<div class="clickable" style="min-width:150px;" onclick="go('foodDetail',{selectedFoodId:${f.id}})">
-    <div class="card" style="overflow:hidden;">
-      <div class="foodthumb" style="background:${f.grad};">${foodMedia(f)}
-        <span class="pill pill-coral" style="position:absolute; top:8px; left:8px;">${icon('clock',11,'var(--coral)')} ends ${f.pickup.split('–')[1]}</span>
+  return `<div class="clickable food-card food-card--sm" style="min-width:150px;" onclick="go('foodDetail',{selectedFoodId:${f.id}})">
+    <div class="card" style="overflow:hidden; border:none; box-shadow:none; background:transparent;">
+      <div class="foodthumb food-card__media" style="background:${f.grad};">
+        ${foodMedia(f)}
+        <span class="pill pill-coral food-card__badge" style="position:absolute; top:8px; left:8px;">${icon('clock',11,'var(--coral)')} ends ${f.pickup.split('–')[1]}</span>
       </div>
-      <div style="padding:10px 11px 12px;">
-        <div style="font-size:12.5px; font-weight:700; line-height:1.25;">${f.name}</div>
-        <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">${f.store}</div>
-        <div style="display:flex; align-items:baseline; gap:6px; margin-top:6px;">
-          <span style="font-weight:800; color:var(--forest); font-size:14px;">${money(f.price)}</span>
-          <span style="font-size:11px; color:var(--ink-soft); text-decoration:line-through;">${money(f.original)}</span>
+      <div class="food-card__body">
+        <div class="food-card__title">${f.name}</div>
+        <div class="food-card__store">${f.store}</div>
+        <div class="food-card__row">
+          <div>
+            <span class="food-card__price">${money(f.price)}</span>
+            <span class="food-card__old">${money(f.original)}</span>
+          </div>
+          <button class="food-card__cta" onclick="event.stopPropagation(); go('foodDetail',{selectedFoodId:${f.id}})">Buy</button>
         </div>
       </div>
     </div>
   </div>`;
 }
-function foodCardLg(f){
+function foodCardLg(f, ctaLabel='Buy', ctaIcon='gift'){
   const disc = Math.round((1-f.price/f.original)*100);
-  return `<div class="card clickable" style="display:flex; gap:12px; padding:10px; align-items:center;" onclick="go('foodDetail',{selectedFoodId:${f.id}})">
-    <div class="foodthumb" style="background:${f.grad}; width:78px; height:78px; border-radius:14px; flex:0 0 auto; font-size:30px;">${foodMedia(f)}</div>
-    <div style="flex:1; min-width:0;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:6px;">
-        <div style="font-size:13.5px; font-weight:700; line-height:1.25;">${f.name}</div>
+  return `<div class="card clickable food-card food-card--lg" onclick="go('foodDetail',{selectedFoodId:${f.id}})">
+    <div class="foodthumb food-card__media" style="background:${f.grad}; width:78px; height:78px; border-radius:14px; flex:0 0 auto; font-size:30px;">${foodMedia(f)}</div>
+    <div class="food-card__content">
+      <div class="food-card__header">
+        <div class="food-card__title">${f.name}</div>
         <span class="pill pill-mint" style="flex:0 0 auto;">-${disc}%</span>
       </div>
-      <div style="font-size:11.5px; color:var(--ink-soft); margin-top:2px;">${f.store} · ${f.distance} km</div>
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:8px;">
-        <span style="font-weight:800; color:var(--forest); font-size:14.5px;">${money(f.price)} <span style="font-size:11px; color:var(--ink-soft); font-weight:500; text-decoration:line-through;">${money(f.original)}</span></span>
-        <span class="pill pill-mint" style="font-size:10px;">+${Math.max(5,Math.round(f.price/10))} pts</span>
+      <div class="food-card__store" style="margin-top:2px;">${f.store} · ${f.distance} km</div>
+      <div class="food-card__footer">
+        <div class="food-card__price-wrap">
+          <span class="food-card__price">${money(f.price)}</span>
+          <span class="food-card__old">${money(f.original)}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="pill pill-mint" style="font-size:10px;">+${Math.max(5,Math.round(f.price/10))} pts</span>
+          <button class="food-card__cta" onclick="event.stopPropagation(); go('foodDetail',{selectedFoodId:${f.id}})">${ctaIcon?icon(ctaIcon,10,'#fff'):''}${ctaLabel}</button>
+        </div>
       </div>
     </div>
   </div>`;
 }
-function foodMedia(f){ return `<img class="food-photo" src="${f.image}" alt="${f.name}" loading="lazy"><span class="food-emoji" aria-hidden="true">${f.emoji}</span>`; }
+function foodMedia(f){ return `<img class="food-photo" src="${f.image}" alt="${f.name}" loading="lazy">`; }
 
 /* ---- Search / filter / map ---- */
 function screenSearch(){
@@ -229,9 +262,9 @@ function screenFoodDetail(){
       <row-item icon="map" label="Pickup location" value="${f.store}, ${f.distance} km away"></row-item>
     </div>
     <div class="card" style="margin-top:14px;padding:14px;background:var(--mint-light);border-color:#CBE9D1;">
-      <div style="color:var(--forest);font-size:13px;font-weight:800;">💚 Good news for hungry paws!</div>
+      <div style="color:var(--forest);font-size:13px;font-weight:800;">Good news for hungry paws!</div>
       <div style="font-size:12px;color:var(--ink-soft);margin-top:5px;line-height:1.45;">This item is checked and ready to make a meaningful difference.</div>
-      <div style="margin-top:9px;font-size:14px;color:var(--forest);font-weight:900;">⭐ You will earn +${Math.max(5,Math.round(f.price/10))} Points</div>
+      <div style="margin-top:9px;font-size:14px;color:var(--forest);font-weight:900;">You will earn +${Math.max(5,Math.round(f.price/10))} points</div>
     </div>
 
     <h3 style="font-size:13.5px; margin-top:18px;">Ingredients</h3>
@@ -275,7 +308,7 @@ function screenCart(){
     ${items.length===0? `<div style="text-align:center; padding:60px 0; color:var(--ink-soft);">${icon('box',34,'var(--ink-soft)')}<div style="margin-top:10px; font-size:13px;">Your cart is empty.</div><button class="btn btn-mint btn-sm" style="margin-top:14px; width:auto; padding:10px 20px;" onclick="go('home')">Browse food</button></div>` :
     items.map(({food,qty})=>`
       <div class="card" style="display:flex; gap:12px; padding:10px; align-items:center; margin-top:12px;">
-        <div class="foodthumb" style="background:${food.grad}; width:60px;height:60px;border-radius:12px; font-size:24px;">${food.emoji}</div>
+        <div class="foodthumb" style="background:${food.grad}; width:60px;height:60px;border-radius:12px; overflow:hidden; padding:0;">${foodMedia(food)}</div>
         <div style="flex:1;">
           <div style="font-size:13px; font-weight:700;">${food.name}</div>
           <div style="font-size:11.5px; color:var(--ink-soft); margin-top:2px;">${food.store}</div>
@@ -431,7 +464,7 @@ function screenTracking(){
     <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px; padding-bottom:20px;">
       ${[foods[2],foods[1]].map(f=>`
       <div class="card clickable" style="display:flex; gap:10px; padding:10px; align-items:center;" onclick="go('foodDetail',{selectedFoodId:${f.id}})">
-        <div class="foodthumb" style="background:${f.grad}; width:46px;height:46px;border-radius:10px; font-size:20px;">${f.emoji}</div>
+        <div class="foodthumb" style="background:${f.grad}; width:46px;height:46px;border-radius:10px; overflow:hidden; padding:0;">${foodMedia(f)}</div>
         <div style="flex:1;">
           <div style="font-size:12.5px; font-weight:700;">${f.name}</div>
           <div style="font-size:11px; color:var(--ink-soft);">${f.store} · Completed</div>
@@ -456,11 +489,11 @@ function screenProfile(){
   ];
   return `
   <div class="px" style="padding-top:22px; display:flex; align-items:center; gap:14px;">
-    <div style="width:56px;height:56px;border-radius:16px; background:linear-gradient(135deg,var(--forest),var(--mint)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-family:'Sora'; font-size:19px;">N</div>
+    <div style="width:58px;height:58px;border-radius:18px; background:linear-gradient(135deg,#2f8f5d,#97d1a1); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-family:'Sora'; font-size:21px; box-shadow:0 12px 24px -18px rgba(19,74,52,0.45);">N</div>
     <div>
-      <div style="font-weight:700; font-size:15.5px;">Nara Suthep</div>
+      <div style="font-weight:800; font-size:15.5px; font-family:'Sora';">Nara Suthep</div>
       <div style="font-size:12px; color:var(--ink-soft);">nara.s@email.com</div>
-      <span class="pill pill-mint" style="margin-top:4px;">Smart Member</span>
+      <span class="pill pill-mint" style="margin-top:5px;">Smart Member</span>
     </div>
   </div>
   <div class="px" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:18px;">
@@ -471,11 +504,11 @@ function screenProfile(){
     ${rows.map(([ic,label,target])=>`
     <div class="card clickable" style="padding:13px 14px; display:flex; align-items:center; gap:12px;" onclick="${target?`go('${target}')`:''}">
       <div style="width:32px;height:32px;border-radius:9px; background:var(--mint-light); display:flex; align-items:center; justify-content:center;">${icon(ic,16,'var(--forest)')}</div>
-      <span style="flex:1; font-size:13px; font-weight:600;">${label}</span>${icon('chevronR',16,'var(--ink-soft)')}
+      <span style="flex:1; font-size:13px; font-weight:700;">${label}</span>${icon('chevronR',16,'var(--ink-soft)')}
     </div>`).join('')}
     <div class="card clickable" style="padding:13px 14px; display:flex; align-items:center; gap:12px; margin-top:6px;" onclick="go('login')">
       <div style="width:32px;height:32px;border-radius:9px; background:var(--coral-light); display:flex; align-items:center; justify-content:center;">${icon('logout',16,'var(--coral)')}</div>
-      <span style="flex:1; font-size:13px; font-weight:600; color:var(--coral);">Log out</span>
+      <span style="flex:1; font-size:13px; font-weight:700; color:var(--coral);">Log out</span>
     </div>
   </div>
   `;
@@ -489,7 +522,7 @@ function screenDonate(){
   return `
   ${header('Donate Food', "go('profile')")}
   <div class="px" style="padding-bottom:20px;">
-    ${state.donationSuccessPoints?`<div class="card" style="margin-top:4px;padding:17px;text-align:center;background:#F7FFF6;border-color:#BFE3C7;"><div class="pet-success"><div class="pet-success-title" style="font-size:20px;">Donation Successful!</div><div style="position:relative;z-index:1;font-size:12px;color:var(--ink-soft);margin-top:4px;">Thank you for your kindness!</div></div><div style="font-size:16px;font-weight:900;color:var(--forest);margin-top:10px;">⭐ +${state.donationSuccessPoints} points earned</div><button class="btn btn-primary btn-sm" style="margin-top:13px;width:auto;" onclick="dismissDonationSuccess()">Back to food list</button></div>`:''}
+    ${state.donationSuccessPoints?`<div class="card" style="margin-top:4px;padding:17px;text-align:center;background:#F7FFF6;border-color:#BFE3C7;"><div class="pet-success"><div class="pet-success-title" style="font-size:20px;">Donation Successful!</div><div style="position:relative;z-index:1;font-size:12px;color:var(--ink-soft);margin-top:4px;">Thank you for your kindness!</div></div><div style="font-size:16px;font-weight:900;color:var(--forest);margin-top:10px;">+${state.donationSuccessPoints} points earned</div><button class="btn btn-primary btn-sm" style="margin-top:13px;width:auto;" onclick="dismissDonationSuccess()">Back to food list</button></div>`:''}
     <div class="card" style="background:linear-gradient(120deg,var(--forest),#1F6E4A); border:none; padding:16px; color:#fff; margin-top:4px;">
       <div style="font-size:12px; opacity:.85;">Total points</div>
       <div style="font-size:27px; font-weight:800; font-family:'Sora'; margin-top:2px;">${data?data.totalPoints:'—'} pts</div>
@@ -503,13 +536,22 @@ function screenDonate(){
         const eligible=food.eligible&&!donated;
         const points=Math.max(5,Math.round(food.price/10));
         const displayFood=foods.find(f=>f.id===food.id);
-        return `<div class="card" style="display:flex; gap:11px; padding:11px; margin-top:10px; align-items:center; opacity:${eligible?'1':'.72'};">
-          <div class="foodthumb" style="background:${displayFood?.grad||'var(--mint-light)'}; width:58px;height:58px;border-radius:12px; font-size:25px; flex:0 0 auto;">${displayFood?foodMedia(displayFood):'🍽️'}</div>
-          <div style="flex:1; min-width:0;">
-            <div style="font-size:12.5px; font-weight:700; line-height:1.25;">${food.name}</div>
-            <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">${eligible?`Eligible · +${points} pts`:(donated?'Already donated':'Below eligibility threshold')}</div>
+        return `<div class="card donation-card" style="opacity:${eligible?'1':'.72'};">
+          <div class="donation-card-image" style="background:${displayFood?.grad||'var(--mint-light)'};">
+            ${displayFood?foodMedia(displayFood):'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;">🍽️</div>'}
           </div>
-          ${eligible?`<button class="btn btn-primary btn-sm" style="width:auto; padding:9px 12px;" ${state.donatingFoodId===food.id?'disabled':''} onclick="confirmDonation(${food.id})">${state.donatingFoodId===food.id?'…':'Donate'}</button>`:`<span class="pill ${donated?'pill-mint':'pill-amber'}">${donated?'Done':'Not eligible'}</span>`}
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; justify-content:space-between; gap:8px; align-items:flex-start;">
+              <div style="font-size:12.5px; font-weight:800; line-height:1.25;">${food.name}</div>
+              <span class="donation-badge ${donated?'done':eligible?'eligible':'locked'}">${donated?'Completed':eligible?'Eligible':'Not eligible'}</span>
+            </div>
+            <div style="font-size:11px; color:var(--ink-soft); margin-top:5px;">Qty ${food.qty} · Expires soon</div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+              <span class="pill pill-mint">${icon('leaf',10,'var(--forest)')} +${points} pts</span>
+              <span class="pill pill-sky">${icon('clock',10,'var(--sky)')} Ready</span>
+            </div>
+          </div>
+          ${eligible?`<button class="btn btn-primary btn-sm" style="width:auto; padding:9px 12px;" ${state.donatingFoodId===food.id?'disabled':''} onclick="confirmDonation(${food.id})">${state.donatingFoodId===food.id?'…':'Donate'}</button>`:`<span class="pill ${donated?'pill-mint':'pill-amber'}">${donated?'Done':'Hold'}</span>`}
         </div>`;
       }).join('')||`<div style="padding:22px 0; color:var(--ink-soft); font-size:12px;">No donation options available.</div>`}
     <h3 style="font-size:13.5px; margin-top:20px;">Donation history</h3>
@@ -522,21 +564,63 @@ function screenDonate(){
 function screenDonationSuccess(){
   const food=foods.find(item=>item.id===state.donationSuccessFoodId)||foods[0];
   const points=state.donationSuccessPoints||Math.max(5,Math.round(food.price/10));
-  return `<div class="donation-success"><div class="success-content">
-    <img class="success-pet" src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=500&q=90" alt="Happy puppy celebrating your donation">
-    <div class="success-title">Donation Successful!</div>
-    <div class="success-subtitle">Thank you for your kindness!<br>You earned <strong>${points} points!</strong></div>
-    <div class="success-food-card">
-      <img class="success-food-image" src="${food.image}" alt="${food.name}">
-      <div style="min-width:0;flex:1;"><div style="font-size:13px;font-weight:800;line-height:1.25;">${food.name}</div><div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">1 kg</div><div class="success-points"><span class="success-star">★</span> +${points} pts</div></div>
+  return `<div class="success-shell">
+    <div class="success-panel" style="animation:fadein .28s ease;">
+      <span class="success-confetti success-confetti--1">✦</span>
+      <span class="success-confetti success-confetti--2">✦</span>
+      <span class="success-confetti success-confetti--3">✦</span>
+      <span class="success-confetti success-confetti--4">✦</span>
+      <div class="success-hero">
+        <div class="success-avatar">
+          <img src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=900&q=85" alt="Happy puppy">
+        </div>
+        <div class="success-title">Donation Successful!</div>
+        <div class="success-subtext">
+          Thank you for your kindness!<br>
+          <strong>You earned ${points} points!</strong>
+        </div>
+        <div class="success-card">
+          <div class="success-card-inner">
+            <div class="success-card-thumb">
+              <img src="${food.image}" alt="${food.name}">
+            </div>
+            <div class="success-card-copy">
+              <div class="success-card-name">${food.name}</div>
+              <div class="success-card-meta">1 kg</div>
+              <div class="success-card-points">
+                <span class="star">★</span>
+                <span>+${points} pts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="success-highlight">Small actions make a big difference</div>
+        <button class="btn btn-primary success-action" onclick="dismissDonationSuccess()">Back to Food List</button>
+      </div>
     </div>
-    <div class="success-actions"><button class="btn btn-primary" onclick="dismissDonationSuccess()">Back to Food List</button></div>
-  </div></div>`;
+  </div>`;
 }
 function donationConfirmModal(foodId){
   const food=foods.find(item=>item.id===foodId);
   const points=Math.max(5,Math.round(food.price/10));
-  return `<div class="filter-sheet-backdrop" style="align-items:center;justify-content:center;padding:20px;" onclick="cancelDonation()"><div class="card" style="width:100%;padding:18px;" onclick="event.stopPropagation()"><div class="foodthumb" style="height:130px;border-radius:18px;background:${food.grad};">${foodMedia(food)}</div><div style="font-size:18px;font-weight:900;font-family:'Nunito';margin-top:14px;">Ready to help some hungry paws?</div><div style="font-size:12px;color:var(--ink-soft);margin-top:5px;">${food.name} · Qty 1</div><div style="margin-top:12px;padding:11px;border-radius:14px;background:var(--mint-light);color:var(--forest);font-size:14px;font-weight:900;text-align:center;">⭐ You will receive +${points} points</div><div style="display:flex;gap:8px;margin-top:14px;"><button class="btn btn-ghost btn-sm" onclick="cancelDonation()">Cancel</button><button class="btn btn-primary btn-sm" onclick="completeDonation(${foodId})">Confirm Donation</button></div></div></div>`;
+  return `<div class="donation-modal-backdrop" onclick="cancelDonation()"><div class="donation-modal-content" onclick="event.stopPropagation()">
+    <div class="donation-modal-header">
+      <span class="mini-pill">Ready to help</span>
+      <button onclick="cancelDonation()" style="border:none;background:var(--mint-light);color:var(--forest);width:28px;height:28px;border-radius:8px;font-size:18px;cursor:pointer;">×</button>
+    </div>
+    <div class="donation-modal-image">${foodMedia(food)}</div>
+    <div class="donation-modal-title">Donate ${food.name}?</div>
+    <div class="donation-modal-meta">Qty 1 · Expires soon · Friendly donation for hungry paws</div>
+    <div class="donation-summary">
+      <div class="donation-summary-row"><span>Food</span><strong>${food.name}</strong></div>
+      <div class="donation-summary-row"><span>Points you will earn</span><strong>+${points} pts</strong></div>
+      <div class="donation-summary-row"><span>Impact</span><strong>Help more animals</strong></div>
+    </div>
+    <div class="donation-action-row">
+      <button class="btn btn-ghost btn-sm" onclick="cancelDonation()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="completeDonation(${foodId})">Confirm Donation</button>
+    </div>
+  </div></div>`;
 }
 
 /* ---- Rewards ---- */
@@ -545,24 +629,27 @@ function screenRewards(){
   return `
   ${header('Rewards & points', "go('profile')")}
   <div class="px">
-    <div class="card" style="background:linear-gradient(120deg,var(--forest),#1F6E4A); border:none; padding:18px; color:#fff; margin-top:4px;">
+    <div class="card" style="background:linear-gradient(120deg,var(--forest),#1F6E4A); border:none; padding:18px; color:#fff; margin-top:4px; box-shadow:0 18px 28px -18px rgba(19,74,52,0.5);">
       <div style="font-size:12px; opacity:.85;">Available points</div>
-      <div style="font-size:28px; font-weight:800; font-family:'Nunito'; margin-top:2px;">${points} pts</div>
+      <div style="font-size:28px; font-weight:800; font-family:'Sora'; margin-top:2px;">${points} pts</div>
       <div style="font-size:11.5px; opacity:.85; margin-top:4px;">≈ ฿32.00 in redeemable value</div>
     </div>
-    <h3 style="font-size:13px; margin-top:18px;">Ways to earn</h3>
+    <h3 style="font-size:13px; margin-top:18px;">How to earn points?</h3>
     <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
-      ${[['box','Buy rescued food','+10 pts / order'],['star','Leave a review','+5 pts'],['leaf','Join sustainability campaigns','+15 pts'],['users','Refer a friend','+50 pts']].map(([ic,l,r])=>`
-      <div class="card" style="padding:12px 14px; display:flex; align-items:center; gap:12px;">
+      ${[['gift','Donate Food','Turn saved meals into real impact for animals'],['star','Complete Tasks','Rate rescued food and help improve the marketplace'],['leaf','Help More Animals','Join eco-friendly actions and community challenges']].map(([ic,l,d])=>`
+      <div class="card" style="padding:12px 14px; display:flex; align-items:center; gap:12px; background:linear-gradient(180deg,#ffffff,#f3faf4);">
         <div style="width:32px;height:32px;border-radius:9px; background:var(--mint-light); display:flex; align-items:center; justify-content:center;">${icon(ic,16,'var(--forest)')}</div>
-        <span style="flex:1; font-size:12.5px; font-weight:600;">${l}</span><span style="font-size:11.5px; color:var(--forest); font-weight:700;">${r}</span>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:12.5px; font-weight:800;">${l}</div>
+          <div style="font-size:11px; color:var(--ink-soft); margin-top:2px; line-height:1.35;">${d}</div>
+        </div>
       </div>`).join('')}
     </div>
     <h3 style="font-size:13px; margin-top:18px;">Redeem</h3>
     <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px; padding-bottom:20px;">
       ${[['฿20 off next order','200 pts'],['Free coffee at Basil & Bean','150 pts'],['Early access to hotel deals','300 pts']].map(([l,c])=>`
       <div class="card" style="padding:12px 14px; display:flex; align-items:center; justify-content:space-between;">
-        <span style="font-size:12.5px; font-weight:600;">${l}</span>
+        <span style="font-size:12.5px; font-weight:700;">${l}</span>
         <button class="btn-sm" style="border:1px solid var(--line); background:#fff;">${c}</button>
       </div>`).join('')}
     </div>
@@ -606,7 +693,7 @@ function screenFavorites(){
   return `
   ${header('Favorites', "go('profile')")}
   <div class="px" style="display:flex; flex-direction:column; gap:12px; padding-bottom:20px;">
-    ${favs.map(f=>foodCardLg(f)).join('')}
+    ${favs.map(f=>foodCardLg(f, 'Buy', 'box')).join('')}
   </div>
   `;
 }
