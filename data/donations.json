@@ -1,8 +1,33 @@
 {
   "userId": "demo-user-nara",
-  "totalPoints": 330,
-  "donations": [],
+  "totalPoints": 355,
+  "donations": [
+    {
+      "id": "DON-1788959414009",
+      "foodId": 4,
+      "foodName": "Mixed Veg & Fruit Crate",
+      "quantity": 1,
+      "donationDate": "2026-09-09T13:10:14.009Z",
+      "pointsEarned": 8,
+      "status": "completed"
+    },
+    {
+      "id": "DON-1788959390011",
+      "foodId": 1,
+      "foodName": "Roast Chicken Rice Box",
+      "quantity": 1,
+      "donationDate": "2026-09-09T13:09:50.011Z",
+      "pointsEarned": 7,
+      "status": "completed"
+    }
+  ],
   "orders": [
+    {
+      "orderId": "SFR-59425900",
+      "pointsEarned": 10,
+      "orderDate": "2026-09-09T13:10:27.518Z",
+      "status": "completed"
+    },
     {
       "orderId": "SFR-57823654",
       "pointsEarned": 10,
