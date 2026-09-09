@@ -38,12 +38,12 @@ function icon(name, size=20, stroke='var(--ink-soft)', fill='none'){
 
 /* ============ MOCK DATA ============ */
 const foods = [
-  {id:1, name:"Roast Chicken Rice Box", store:"Golden Wok Kitchen", cat:"Meals", emoji:"🍛", grad:"linear-gradient(135deg,#FCE9C9,#F6C36B)", original:180, price:69, qty:6, distance:0.6, rating:4.8, pickup:"18:30–19:30", prep:"Cooked today at 14:00", best:"Today, 21:00", allergens:["Gluten","Soy"], ingredients:"Jasmine rice, roasted chicken thigh, soy-ginger glaze, pickled vegetables.", storeRating:4.8, reviews:212, safety:"Held in a chiller since 14:30 · HACCP-certified kitchen · staff trained in food safety handling."},
-  {id:2, name:"Sourdough Loaf (day-old)", store:"Meadow & Rye Bakery", cat:"Bakery", emoji:"🍞", grad:"linear-gradient(135deg,#F3E3C6,#D9A968)", original:140, price:45, qty:3, distance:0.9, rating:4.9, pickup:"19:00–20:00", prep:"Baked yesterday, 06:00", best:"Tomorrow, 12:00", allergens:["Gluten"], ingredients:"Wheat flour, water, sourdough starter, sea salt.", storeRating:4.9, reviews:340, safety:"Ambient storage, sealed in a paper bag at close of day."},
-  {id:3, name:"Iced Latte + Almond Croissant", store:"Basil & Bean Café", cat:"Café", emoji:"☕", grad:"linear-gradient(135deg,#E7DCCB,#C9A27C)", original:150, price:59, qty:4, distance:0.3, rating:4.7, pickup:"17:00–18:00", prep:"Made fresh today", best:"Today, 20:00", allergens:["Dairy","Gluten","Nuts"], ingredients:"Espresso, fresh milk, almond-frangipane croissant.", storeRating:4.7, reviews:98, safety:"Pastry case held below 4°C until pickup."},
-  {id:4, name:"Mixed Veg & Fruit Crate", store:"FreshMart Supermarket", cat:"Grocery", emoji:"🥦", grad:"linear-gradient(135deg,#DCEFD8,#8FCB8A)", original:220, price:79, qty:10, distance:1.4, rating:4.5, pickup:"20:00–21:00", prep:"Sorted today", best:"In 2–3 days", allergens:[], ingredients:"Seasonal vegetables and fruit nearing best-by date, still firm and edible.", storeRating:4.5, reviews:501, safety:"Cold-chain maintained; items visually inspected before listing."},
-  {id:5, name:"Weekend Brunch Buffet Box", store:"Riverside Grand Hotel", cat:"Hotel", emoji:"🍳", grad:"linear-gradient(135deg,#E3E9F2,#AEC2E0)", original:390, price:129, qty:5, distance:2.1, rating:4.9, pickup:"14:30–15:30", prep:"Prepared 10:00 today", best:"Today, 17:00", allergens:["Egg","Dairy","Gluten"], ingredients:"Assorted brunch dishes from the buffet line, portioned and sealed.", storeRating:4.9, reviews:76, safety:"Held under buffet heat-lamp compliance, then chilled at 11:30."},
-  {id:6, name:"Protein Grain Bowl", store:"Basil & Bean Café", cat:"Healthy Food", emoji:"🥗", grad:"linear-gradient(135deg,#DDEDD0,#A9D48A)", original:165, price:69, qty:7, distance:0.3, rating:4.6, pickup:"18:00–19:00", prep:"Made today, 11:30", best:"Today, 20:00", allergens:["Soy"], ingredients:"Quinoa, grilled chicken, edamame, roasted pumpkin, tahini dressing.", storeRating:4.7, reviews:98, safety:"Chilled below 4°C, sealed container."},
+  {id:1, name:"Roast Chicken Rice Box", store:"Golden Wok Kitchen", cat:"Meals", emoji:"🍛", image:"https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#FCE9C9,#F6C36B)", original:180, price:69, qty:6, distance:0.6, rating:4.8, pickup:"18:30–19:30", prep:"Cooked today at 14:00", best:"Today, 21:00", allergens:["Gluten","Soy"], ingredients:"Jasmine rice, roasted chicken thigh, soy-ginger glaze, pickled vegetables.", storeRating:4.8, reviews:212, safety:"Held in a chiller since 14:30 · HACCP-certified kitchen · staff trained in food safety handling."},
+  {id:2, name:"Sourdough Loaf (day-old)", store:"Meadow & Rye Bakery", cat:"Bakery", emoji:"🍞", image:"https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#F3E3C6,#D9A968)", original:140, price:45, qty:3, distance:0.9, rating:4.9, pickup:"19:00–20:00", prep:"Baked yesterday, 06:00", best:"Tomorrow, 12:00", allergens:["Gluten"], ingredients:"Wheat flour, water, sourdough starter, sea salt.", storeRating:4.9, reviews:340, safety:"Ambient storage, sealed in a paper bag at close of day."},
+  {id:3, name:"Iced Latte + Almond Croissant", store:"Basil & Bean Café", cat:"Café", emoji:"☕", image:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#E7DCCB,#C9A27C)", original:150, price:59, qty:4, distance:0.3, rating:4.7, pickup:"17:00–18:00", prep:"Made fresh today", best:"Today, 20:00", allergens:["Dairy","Gluten","Nuts"], ingredients:"Espresso, fresh milk, almond-frangipane croissant.", storeRating:4.7, reviews:98, safety:"Pastry case held below 4°C until pickup."},
+  {id:4, name:"Mixed Veg & Fruit Crate", store:"FreshMart Supermarket", cat:"Grocery", emoji:"🥦", image:"https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#DCEFD8,#8FCB8A)", original:220, price:79, qty:10, distance:1.4, rating:4.5, pickup:"20:00–21:00", prep:"Sorted today", best:"In 2–3 days", allergens:[], ingredients:"Seasonal vegetables and fruit nearing best-by date, still firm and edible.", storeRating:4.5, reviews:501, safety:"Cold-chain maintained; items visually inspected before listing."},
+  {id:5, name:"Weekend Brunch Buffet Box", store:"Riverside Grand Hotel", cat:"Hotel", emoji:"🍳", image:"https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#E3E9F2,#AEC2E0)", original:390, price:129, qty:5, distance:2.1, rating:4.9, pickup:"14:30–15:30", prep:"Prepared 10:00 today", best:"Today, 17:00", allergens:["Egg","Dairy","Gluten"], ingredients:"Assorted brunch dishes from the buffet line, portioned and sealed.", storeRating:4.9, reviews:76, safety:"Held under buffet heat-lamp compliance, then chilled at 11:30."},
+  {id:6, name:"Protein Grain Bowl", store:"Basil & Bean Café", cat:"Healthy Food", emoji:"🥗", image:"https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=85", grad:"linear-gradient(135deg,#DDEDD0,#A9D48A)", original:165, price:69, qty:7, distance:0.3, rating:4.6, pickup:"18:00–19:00", prep:"Made today, 11:30", best:"Today, 20:00", allergens:["Soy"], ingredients:"Quinoa, grilled chicken, edamame, roasted pumpkin, tahini dressing.", storeRating:4.7, reviews:98, safety:"Chilled below 4°C, sealed container."},
 ];
 const categories = [
   {name:"Meals", emoji:"🍛"},{name:"Bakery", emoji:"🍞"},{name:"Café", emoji:"☕"},
@@ -74,6 +74,9 @@ let state = {
   donatingFoodId:null,
   orderPoints:null,
   orderRewardLoading:false,
+  confirmFoodId:null,
+  donationSuccessPoints:null,
+  donationSuccessFoodId:null,
 };
 
 function money(n){ return '฿'+n.toLocaleString(); }
@@ -102,13 +105,14 @@ function go(screen, extra){
 function renderCustomer(animate=true){
   const el = document.getElementById('customer-screen');
   const nav = document.getElementById('customer-nav');
-  const navScreens = ['home','search','tracking','profile'];
+  const navScreens = ['home','search','tracking','profile','donate','rewards'];
   if(navScreens.includes(state.screen)){
     nav.style.display='flex';
     nav.innerHTML = `
       ${navBtn('home','home','Home')}
-      ${navBtn('search','search','Search')}
-      ${navBtn('tracking','receipt','Orders')}
+      ${navBtn('search','search','Food')}
+      ${navBtn('donate','gift','Donate')}
+      ${navBtn('rewards','star','Points')}
       ${navBtn('profile','user','Profile')}
     `;
   } else { nav.style.display='none'; }
@@ -117,7 +121,7 @@ function renderCustomer(animate=true){
     splash: screenSplash, login: screenLogin, home: screenHome, search: screenSearch,
     foodDetail: screenFoodDetail, cart: screenCart, checkout: screenCheckout,
     payment: screenPayment, confirmation: screenConfirmation, tracking: screenTracking,
-    profile: screenProfile, rewards: screenRewards, donate: screenDonate, sustainability: screenSustainability,
+    profile: screenProfile, rewards: screenRewards, donate: screenDonate, donationSuccess: screenDonationSuccess, sustainability: screenSustainability,
     support: screenSupport, favorites: screenFavorites,
   };
   el.innerHTML = `<div class="${animate?'fade-in':''}">${(screens[state.screen]||screenHome)()}</div>`;

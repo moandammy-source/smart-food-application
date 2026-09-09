@@ -100,23 +100,49 @@ async function loadDonationData(){
 async function confirmDonation(foodId){
   const food=(state.donationData?.foods||[]).find(item=>item.id===foodId);
   if(!food?.eligible) return;
-  const points=Math.max(5,Math.round(food.price/10));
-  if(!window.confirm(`Are you sure you want to donate this food? You will earn ${points} points.`)) return;
+  state.confirmFoodId=foodId;
+  renderCustomer(false);
+}
+
+function cancelDonation(){
+  state.confirmFoodId=null;
+  renderCustomer(false);
+}
+
+async function completeDonation(foodId){
+  const food=(state.donationData?.foods||[]).find(item=>item.id===foodId);
+  if(!food?.eligible) return;
+  state.confirmFoodId=null;
   state.donatingFoodId=foodId;
   state.donationError='';
+  showSnackbar('Saving your donation...');
   renderCustomer(false);
+  const controller=new AbortController();
+  const timeoutId=setTimeout(()=>controller.abort(),8000);
   try{
-    const response=await fetch('/api/donations',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({foodId})});
+    const response=await fetch('/api/donations',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({foodId}),signal:controller.signal});
     const payload=await response.json();
     if(!response.ok) throw new Error(payload.error||'Donation failed.');
     state.donationData=payload;
+    state.donationSuccessPoints=payload.donations[0]?.pointsEarned||0;
+    state.donationSuccessFoodId=foodId;
     showSnackbar(payload.message);
+    state.screen='donationSuccess';
+    renderCustomer(false);
   }catch(error){
-    state.donationError=error.message||'Donation failed.';
+    state.donationError=error.name==='AbortError'?'The donation took too long. Please try again.':(error.message||'Donation failed.');
   }finally{
+    clearTimeout(timeoutId);
     state.donatingFoodId=null;
     renderCustomer(false);
   }
+}
+
+function dismissDonationSuccess(){
+  state.donationSuccessPoints=null;
+  state.donationSuccessFoodId=null;
+  state.screen='donate';
+  renderCustomer(false);
 }
 
 function showSnackbar(message){

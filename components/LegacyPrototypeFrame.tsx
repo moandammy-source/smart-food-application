@@ -3,7 +3,7 @@ export default function LegacyPrototypeFrame() {
     <iframe
       className="prototype-frame"
       src="/legacy"
-      title="Smart Food Rescue interactive prototype"
+      title="Smart Food interactive prototype"
     />
   );
 }
