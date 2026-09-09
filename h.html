@@ -5,32 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smart Food Rescue</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --forest:#28634C;
-    --forest-2:#347A5C;
-    --mint:#68BE88;
-    --mint-light:#E8F7EC;
+    --forest:#134A34;
+    --forest-2:#1B5E3F;
+    --mint:#3FAE72;
+    --mint-light:#E4F4EA;
     --sky:#2C7BA8;
     --sky-light:#E4F0F6;
-    --cream:#F7FBF6;
+    --cream:#F6F8F4;
     --card:#FFFFFF;
-    --ink:#26352D;
-    --ink-soft:#718078;
-    --line:#E3EEE4;
+    --ink:#152018;
+    --ink-soft:#5B6660;
+    --line:#E4E9E3;
     --amber:#DC9A34;
     --amber-light:#FBF0DD;
     --coral:#D9683E;
     --coral-light:#FBE9E1;
-    --radius-lg:24px;
-    --radius-md:18px;
-    --radius-sm:12px;
-    --shadow: 0 16px 34px -18px rgba(40,99,76,0.28);
+    --radius-lg:22px;
+    --radius-md:16px;
+    --radius-sm:10px;
+    --shadow: 0 14px 30px -14px rgba(19,74,52,0.28);
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
-    font-family:'DM Sans',sans-serif;
+    font-family:'Inter',sans-serif;
     background:
       radial-gradient(circle at 15% 10%, #ECF3E9 0%, transparent 45%),
       radial-gradient(circle at 85% 90%, #E6EFF3 0%, transparent 45%),
@@ -42,7 +42,7 @@
     padding:28px 16px 60px;
     color:var(--ink);
   }
-  h1,h2,h3,h4,.display{ font-family:'Nunito',sans-serif; }
+  h1,h2,h3,h4,.display{ font-family:'Sora',sans-serif; }
   .topbar{
     width:100%; max-width:1180px;
     display:flex; align-items:center; justify-content:space-between;
@@ -137,14 +137,11 @@
     display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:.15s;
   }
   .btn-primary{ background:var(--forest); color:#fff; padding:14px 22px; font-size:14.5px; width:100%; box-shadow:0 10px 20px -10px rgba(19,74,52,0.5); }
-  .btn-primary{ transition:transform .18s, background .18s, box-shadow .18s; }
-  .btn-primary:active{ transform:scale(.98); }
   .btn-primary:hover{ background:var(--forest-2); }
   .btn-ghost{ background:#fff; border:1.5px solid var(--line); color:var(--ink); padding:13px 22px; font-size:14px; width:100%; }
   .btn-sm{ padding:9px 16px; font-size:12.5px; border-radius:999px; }
   .btn-mint{ background:var(--mint-light); color:var(--forest); }
-  .card{ background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--line); box-shadow:0 5px 18px rgba(48,96,70,.05); transition:transform .18s, box-shadow .18s; }
-  .card.clickable:hover{ transform:translateY(-2px); box-shadow:var(--shadow); }
+  .card{ background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--line); }
   .pill{ display:inline-flex; align-items:center; gap:5px; border-radius:999px; padding:4px 10px; font-size:11px; font-weight:700; }
   .pill-mint{ background:var(--mint-light); color:var(--forest); }
   .pill-amber{ background:var(--amber-light); color:#8A5D18; }
@@ -153,14 +150,8 @@
   .tag-cat{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:9px 6px; display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; font-weight:600; color:var(--ink); cursor:pointer;}
   .foodthumb{
     border-radius:var(--radius-md) var(--radius-md) 0 0; height:118px; display:flex; align-items:center; justify-content:center; font-size:40px;
-    position:relative; overflow:hidden; background-size:cover !important; background-position:center !important;
+    position:relative; overflow:hidden;
   }
-  .foodthumb.has-photo{ background-color:#dfeee0; }
-  .foodthumb.has-photo .food-photo{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  .foodthumb.has-photo .food-emoji{ position:relative; z-index:1; opacity:0; }
-  .soft-banner{ position:relative; overflow:hidden; background:linear-gradient(135deg,#E9F8EA 0%,#D8F2DD 100%); border:1px solid #CFEAD4; border-radius:24px; padding:18px; box-shadow:var(--shadow); }
-  .soft-banner:after{ content:'♡  ✦  ♡'; position:absolute; right:12px; bottom:8px; color:#8BCB9D; font-size:18px; letter-spacing:5px; transform:rotate(-8deg); }
-  .points-card{ background:linear-gradient(135deg,#2F7958,#5CAE78); color:#fff; border:0; box-shadow:0 14px 25px -14px rgba(40,99,76,.55); }
   .foodthumb .deco{ position:absolute; inset:0; opacity:.5; }
   .clickable{ cursor:pointer; }
   ::selection{ background:var(--mint-light); }
@@ -184,7 +175,6 @@
   .snackbar.show{ opacity:1; transform:translate(-50%,0); }
   .footnote{ text-align:center; font-size:11.5px; color:var(--ink-soft); margin-top:18px; max-width:420px; }
   a.link{ color:var(--forest); font-weight:600; text-decoration:none; }
-  @media (max-width:520px){ body{padding:12px 8px 36px;} .topbar{margin-bottom:12px;} .device{padding:7px; border-radius:34px;} .screen-wrap{width:min(376px,calc(100vw - 30px)); height:calc(100vh - 92px); min-height:680px;} .mode-switch button{padding:8px 11px; font-size:11px;} .footnote{display:none;} }
 </style>
 </head>
 <body>
@@ -241,7 +231,7 @@
     </div>
   </div>
 
-  <p class="footnote">Rescue a little. Help a lot. Every meal can make a difference.</p>
+  <p class="footnote">Prototype for evaluation — food photos are represented with simple illustrated icons rather than stock photography, per the brief's "simple illustrations" direction. All data shown is sample data.</p>
   <div id="snackbar" class="snackbar" role="status" aria-live="polite"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>

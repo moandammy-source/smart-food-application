@@ -44,7 +44,6 @@ function screenLogin(){
 function screenHome(){
   const nearby = foods.slice().sort((a,b)=>a.distance-b.distance).slice(0,3);
   const endingSoon = foods.filter(f=>f.best.includes('Today')).slice(0,3);
-  const totalPoints=state.donationData?.totalPoints??'—';
   return `
   <div style="padding:16px 20px 10px; display:flex; align-items:center; justify-content:space-between;">
     <div>
@@ -56,19 +55,7 @@ function screenHome(){
       <span style="position:absolute; top:-3px; right:-3px; width:8px; height:8px; border-radius:50%; background:var(--coral); border:2px solid var(--cream);"></span>
     </button>
   </div>
-  <div class="px" style="margin-top:10px;">
-    <div class="soft-banner">
-      <div style="font-size:11px; font-weight:800; color:var(--forest); letter-spacing:.04em; text-transform:uppercase;">A little kindness goes a long way</div>
-      <div style="font-size:22px; font-weight:900; color:var(--forest); font-family:'Nunito'; margin-top:3px;">Rescue Food, Feed Lives <span aria-hidden="true">🐾</span></div>
-      <div style="font-size:12px; color:var(--ink-soft); margin-top:5px; max-width:235px; line-height:1.45;">Good food deserves a second chance, and animals deserve a full tummy.</div>
-    </div>
-    <div class="card points-card" style="margin-top:10px; padding:14px 16px; display:flex; align-items:center; gap:12px;">
-      <div style="width:42px;height:42px;border-radius:15px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px;">⭐</div>
-      <div style="flex:1;"><div style="font-size:11px;opacity:.82;">Your total points</div><div style="font-size:23px;font-weight:900;font-family:'Nunito';">${totalPoints} <span style="font-size:12px;font-weight:700;">pts</span></div></div>
-      <button class="btn btn-sm" style="background:#fff;color:var(--forest);" onclick="go('rewards')">View points</button>
-    </div>
-  </div>
-  <div class="px" style="margin-top:18px;">
+  <div class="px" style="margin-top:6px;">
     <div onclick="go('search')" class="clickable" style="display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 14px;">
       ${icon('search',18,'var(--ink-soft)')}<span style="color:var(--ink-soft); font-size:13.5px;">Search food, store, category…</span>
     </div>
@@ -99,7 +86,7 @@ function screenHome(){
 function foodCardSm(f){
   return `<div class="clickable" style="min-width:150px;" onclick="go('foodDetail',{selectedFoodId:${f.id}})">
     <div class="card" style="overflow:hidden;">
-      <div class="foodthumb has-photo" style="background:${f.grad};">${foodMedia(f)}
+      <div class="foodthumb" style="background:${f.grad};">${f.emoji}
         <span class="pill pill-coral" style="position:absolute; top:8px; left:8px;">${icon('clock',11,'var(--coral)')} ends ${f.pickup.split('–')[1]}</span>
       </div>
       <div style="padding:10px 11px 12px;">
@@ -116,7 +103,7 @@ function foodCardSm(f){
 function foodCardLg(f){
   const disc = Math.round((1-f.price/f.original)*100);
   return `<div class="card clickable" style="display:flex; gap:12px; padding:10px; align-items:center;" onclick="go('foodDetail',{selectedFoodId:${f.id}})">
-    <div class="foodthumb has-photo" style="background:${f.grad}; width:78px; height:78px; border-radius:14px; flex:0 0 auto; font-size:30px;">${foodMedia(f)}</div>
+    <div class="foodthumb" style="background:${f.grad}; width:78px; height:78px; border-radius:14px; flex:0 0 auto; font-size:30px;">${f.emoji}</div>
     <div style="flex:1; min-width:0;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:6px;">
         <div style="font-size:13.5px; font-weight:700; line-height:1.25;">${f.name}</div>
@@ -125,13 +112,10 @@ function foodCardLg(f){
       <div style="font-size:11.5px; color:var(--ink-soft); margin-top:2px;">${f.store} · ${f.distance} km</div>
       <div style="display:flex; align-items:center; justify-content:space-between; margin-top:8px;">
         <span style="font-weight:800; color:var(--forest); font-size:14.5px;">${money(f.price)} <span style="font-size:11px; color:var(--ink-soft); font-weight:500; text-decoration:line-through;">${money(f.original)}</span></span>
-        <span class="pill pill-mint" style="font-size:10px;">+${Math.max(5,Math.round(f.price/10))} pts</span>
+        <span style="font-size:11px; color:var(--ink-soft); display:flex; align-items:center; gap:3px;">${icon('star',12,'var(--amber)','var(--amber)')} ${f.rating}</span>
       </div>
     </div>
   </div>`;
-}
-function foodMedia(f){
-  return `<img class="food-photo" src="${f.image}" alt="${f.name}" loading="lazy"><span class="food-emoji" aria-hidden="true">${f.emoji}</span>`;
 }
 
 /* ---- Search / filter / map ---- */
@@ -205,8 +189,8 @@ function screenFoodDetail(){
   const disc = Math.round((1-f.price/f.original)*100);
   const inCart = state.cart[f.id]||0;
   return `
-  <div class="foodthumb has-photo" style="height:210px; border-radius:0; background:${f.grad}; font-size:72px;">
-    ${foodMedia(f)}
+  <div class="foodthumb" style="height:210px; border-radius:0; background:${f.grad}; font-size:72px;">
+    ${f.emoji}
     <button onclick="go('search')" style="position:absolute; top:16px; left:16px; background:rgba(255,255,255,0.85); border:none; width:34px;height:34px; border-radius:10px; display:flex;align-items:center;justify-content:center;">${icon('left',18)}</button>
     <button onclick="toggleFavorite(${f.id})" aria-label="${state.favorites[f.id]?'Remove from favorites':'Add to favorites'}" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.85); border:none; width:34px;height:34px; border-radius:10px; display:flex;align-items:center;justify-content:center;">${icon('heart',17,state.favorites[f.id]?'var(--coral)':'var(--ink-soft)',state.favorites[f.id]?'var(--coral)':'none')}</button>
     <span class="pill pill-mint" style="position:absolute; bottom:12px; left:16px;">-${disc}% off</span>
@@ -229,11 +213,6 @@ function screenFoodDetail(){
       <row-item icon="tag" label="Prepared" value="${f.prep}"></row-item>
       <row-item icon="leaf" label="Best before" value="${f.best}"></row-item>
       <row-item icon="map" label="Pickup location" value="${f.store}, ${f.distance} km away"></row-item>
-    </div>
-    <div class="card" style="margin-top:14px; padding:14px; background:var(--mint-light); border-color:#CBE9D1;">
-      <div style="display:flex; align-items:center; gap:8px; color:var(--forest); font-size:13px; font-weight:800;">${icon('heart',16,'var(--forest)','var(--mint)')} Good news for hungry paws!</div>
-      <div style="font-size:12px; color:var(--ink-soft); margin-top:5px; line-height:1.45;">This item is carefully checked and can be shared with animals before it expires.</div>
-      <div style="margin-top:9px; font-size:14px; color:var(--forest); font-weight:900;">⭐ You will earn +${Math.max(5,Math.round(f.price/10))} Points</div>
     </div>
 
     <h3 style="font-size:13.5px; margin-top:18px;">Ingredients</h3>
@@ -491,7 +470,6 @@ function screenDonate(){
   return `
   ${header('Donate Food', "go('profile')")}
   <div class="px" style="padding-bottom:20px;">
-    ${state.donationSuccessPoints?`<div class="card" style="margin-top:4px; padding:17px; text-align:center; background:linear-gradient(135deg,#E7F8EA,#F7FFF6); border-color:#BFE3C7;"><div style="font-size:40px;">🐶 💚 🐱</div><div style="font-size:21px; font-weight:900; font-family:'Nunito'; color:var(--forest); margin-top:4px;">Donation Successful!</div><div style="font-size:12px; color:var(--ink-soft); margin-top:4px;">Thank you for your kindness!</div><div style="font-size:16px; font-weight:900; color:var(--forest); margin-top:10px;">⭐ +${state.donationSuccessPoints} points earned</div><button class="btn btn-primary btn-sm" style="margin-top:13px; width:auto;" onclick="dismissDonationSuccess()">Back to food list</button></div>`:''}
     <div class="card" style="background:linear-gradient(120deg,var(--forest),#1F6E4A); border:none; padding:16px; color:#fff; margin-top:4px;">
       <div style="font-size:12px; opacity:.85;">Total points</div>
       <div style="font-size:27px; font-weight:800; font-family:'Sora'; margin-top:2px;">${data?data.totalPoints:'—'} pts</div>
@@ -506,7 +484,7 @@ function screenDonate(){
         const points=Math.max(5,Math.round(food.price/10));
         const displayFood=foods.find(f=>f.id===food.id);
         return `<div class="card" style="display:flex; gap:11px; padding:11px; margin-top:10px; align-items:center; opacity:${eligible?'1':'.72'};">
-          <div class="foodthumb has-photo" style="background:${displayFood?.grad||'var(--mint-light)'}; width:58px;height:58px;border-radius:12px; font-size:25px; flex:0 0 auto;">${displayFood?foodMedia(displayFood):'🍽️'}</div>
+          <div class="foodthumb" style="background:${displayFood?.grad||'var(--mint-light)'}; width:58px;height:58px;border-radius:12px; font-size:25px; flex:0 0 auto;">${displayFood?.emoji||'🍽️'}</div>
           <div style="flex:1; min-width:0;">
             <div style="font-size:12.5px; font-weight:700; line-height:1.25;">${food.name}</div>
             <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">${eligible?`Eligible · +${points} pts`:(donated?'Already donated':'Below eligibility threshold')}</div>
@@ -519,38 +497,25 @@ function screenDonate(){
       <div style="display:flex; justify-content:space-between; gap:8px;"><strong style="font-size:12.5px;">${d.foodName}</strong><span class="pill pill-mint">${d.status}</span></div>
       <div style="display:flex; justify-content:space-between; gap:8px; margin-top:7px; font-size:11px; color:var(--ink-soft);"><span>Qty ${d.quantity} · ${new Date(d.donationDate).toLocaleDateString()}</span><b style="color:var(--forest);">+${d.pointsEarned} pts</b></div>
     </div>`).join('')||`<div style="padding:12px 0; color:var(--ink-soft); font-size:12px;">Your completed donations will appear here.</div>`}
-  </div>
-  ${state.confirmFoodId?donationConfirmModal(state.confirmFoodId):''}`;
-}
-function donationConfirmModal(foodId){
-  const food=foods.find(item=>item.id===foodId);
-  const points=Math.max(5,Math.round(food.price/10));
-  return `<div class="filter-sheet-backdrop" style="align-items:center; justify-content:center; padding:20px;" onclick="cancelDonation()"><div class="card" style="width:100%; padding:18px; animation:fadein .2s ease;" onclick="event.stopPropagation()">
-    <div class="foodthumb has-photo" style="height:130px; border-radius:18px; background:${food.grad};">${foodMedia(food)}</div>
-    <div style="font-size:18px; font-weight:900; font-family:'Nunito'; margin-top:14px;">Ready to help some hungry paws?</div>
-    <div style="font-size:12px; color:var(--ink-soft); margin-top:5px;">${food.name} · Qty 1</div>
-    <div style="margin-top:12px; padding:11px; border-radius:14px; background:var(--mint-light); color:var(--forest); font-size:14px; font-weight:900; text-align:center;">⭐ You will receive +${points} points</div>
-    <div style="display:flex; gap:8px; margin-top:14px;"><button class="btn btn-ghost btn-sm" onclick="cancelDonation()">Cancel</button><button class="btn btn-primary btn-sm" onclick="completeDonation(${foodId})">Confirm Donation</button></div>
-  </div></div>`;
+  </div>`;
 }
 
 /* ---- Rewards ---- */
 function screenRewards(){
-  const points=state.donationData?.totalPoints??'—';
   return `
   ${header('Rewards & points', "go('profile')")}
   <div class="px">
     <div class="card" style="background:linear-gradient(120deg,var(--forest),#1F6E4A); border:none; padding:18px; color:#fff; margin-top:4px;">
       <div style="font-size:12px; opacity:.85;">Available points</div>
-      <div style="font-size:28px; font-weight:800; font-family:'Nunito'; margin-top:2px;">${points} pts</div>
+      <div style="font-size:28px; font-weight:800; font-family:'Sora'; margin-top:2px;">320 pts</div>
       <div style="font-size:11.5px; opacity:.85; margin-top:4px;">≈ ฿32.00 in redeemable value</div>
     </div>
     <h3 style="font-size:13px; margin-top:18px;">Ways to earn</h3>
     <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
-      ${[['gift','Donate Food','Earn points for every eligible meal'],['star','Complete Tasks','Build your kindness streak'],['heart','Help More Animals','Every donation fills a bowl'],['users','Refer a friend','Invite a friend to help']].map(([ic,l,r])=>`
+      ${[['box','Buy rescued food','+10 pts / order'],['star','Leave a review','+5 pts'],['leaf','Join sustainability campaigns','+15 pts'],['users','Refer a friend','+50 pts']].map(([ic,l,r])=>`
       <div class="card" style="padding:12px 14px; display:flex; align-items:center; gap:12px;">
         <div style="width:32px;height:32px;border-radius:9px; background:var(--mint-light); display:flex; align-items:center; justify-content:center;">${icon(ic,16,'var(--forest)')}</div>
-        <span style="flex:1; font-size:12.5px; font-weight:600;">${l}<small style="display:block;color:var(--ink-soft);font-weight:500;margin-top:2px;">${r}</small></span><span style="font-size:18px;">✦</span>
+        <span style="flex:1; font-size:12.5px; font-weight:600;">${l}</span><span style="font-size:11.5px; color:var(--forest); font-weight:700;">${r}</span>
       </div>`).join('')}
     </div>
     <h3 style="font-size:13px; margin-top:18px;">Redeem</h3>
