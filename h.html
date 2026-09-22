@@ -139,6 +139,7 @@
   .sidebar .sb-foot .info b{ font-size:12.5px; display:block; }
   .sidebar .sb-foot .info span{ font-size:11px; color:rgba(255,255,255,0.6); }
   .seller .screen{ background:var(--cream); }
+  .seller .card:hover,.seller .btn:hover{ transform:none; }
 
   /* ---------- shared bits ---------- */
   .px{ padding-left:20px; padding-right:20px; }
@@ -375,6 +376,8 @@
   label{ font-size:12px; font-weight:600; color:var(--ink-soft); display:block; margin-bottom:6px; }
   .fade-in{ animation:fadein .28s ease; }
   @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+  .seller-notice{ margin-bottom:14px; padding:10px 14px; border:1px solid rgba(63,174,114,0.25); border-radius:12px; background:var(--mint-light); color:var(--forest); font-size:12px; font-weight:600; }
+  @keyframes notice-in{ from{opacity:0; transform:translateY(-5px);} to{opacity:1; transform:translateY(0);} }
   .skeleton{ background:linear-gradient(90deg,#edf1ed 25%,#f8faf7 50%,#edf1ed 75%); background-size:200% 100%; animation:skeleton-shimmer 1.15s ease-in-out infinite; border-radius:10px; }
   @keyframes skeleton-shimmer{ from{background-position:200% 0;} to{background-position:-200% 0;} }
   .filter-sheet-backdrop{ position:absolute; inset:0; z-index:20; background:rgba(21,32,24,.28); display:flex; align-items:flex-end; }

@@ -25,9 +25,94 @@ function renderSeller(){
     dashboard: sellerDashboard, upload: sellerUpload, inventory: sellerInventory,
     orders: sellerOrdersScreen, scanner: sellerScanner, analytics: sellerAnalytics, profile: sellerProfile,
   };
-  el.innerHTML = `<div class="fade-in" style="padding:26px 30px; overflow-y:auto; height:100%;">${(screens[state.sellerScreen]||sellerDashboard)()}</div>`;
+  const notice=state.sellerNotice;
+  state.sellerNotice='';
+  el.innerHTML = `<div class="seller-view" style="padding:26px 30px; overflow-y:auto; height:100%;">${notice?`<div class="seller-notice" role="status">${notice}</div>`:''}${(screens[state.sellerScreen]||sellerDashboard)()}</div>`;
 }
 function goSeller(s){ state.sellerScreen=s; renderSeller(); }
+
+function sellerNotice(message){
+  state.sellerNotice=message;
+}
+
+function applySellerDiscount(){
+  const food=sellerFoods.find(item=>item.name==='Green Curry Set');
+  if(!food) return;
+  food.price=Math.round(food.price*0.9);
+  sellerNotice(`${food.name} discount applied. New price ${money(food.price)}.`);
+  renderSeller();
+}
+
+function publishSellerFood(){
+  const value=id=>document.getElementById(id)?.value.trim()||'';
+  const name=value('seller-food-name');
+  const price=Number(value('seller-food-price'));
+  const qty=Number(value('seller-food-qty'));
+  if(!name||!price||!qty){ sellerNotice('Please enter food name, price, and quantity.'); return; }
+  sellerFoods.unshift({id:Date.now(),name,qty,sold:0,status:qty<3?'Low Stock':'Available',price,emoji:'',grad:'linear-gradient(135deg,#E4F0DC,#B8DFA1)'});
+  sellerNotice(`${name} published successfully.`);
+  goSeller('inventory');
+}
+
+function editSellerFood(id){
+  if(!sellerFoods.some(item=>item.id===id)) return;
+  state.sellerEditingFoodId=id;
+  const row=document.getElementById(`seller-food-row-${id}`);
+  if(row) row.outerHTML=sellerInventoryRow(sellerFoods.find(item=>item.id===id));
+}
+
+function cancelEditSellerFood(){
+  const id=state.sellerEditingFoodId;
+  state.sellerEditingFoodId=null;
+  const row=document.getElementById(`seller-food-row-${id}`);
+  const food=sellerFoods.find(item=>item.id===id);
+  if(row&&food) row.outerHTML=sellerInventoryRow(food);
+}
+
+function saveEditSellerFood(id){
+  const food=sellerFoods.find(item=>item.id===id);
+  const field=document.getElementById(`seller-edit-qty-${id}`);
+  const next=Number(field?.value);
+  if(!food||!Number.isInteger(next)||next<0){ sellerNotice('Quantity must be a whole number of 0 or more.'); return; }
+  food.qty=next;
+  food.status=next===0?'Sold Out':next<3?'Low Stock':'Available';
+  state.sellerEditingFoodId=null;
+  sellerNotice(`${food.name} inventory saved.`);
+  const row=document.getElementById(`seller-food-row-${id}`);
+  if(row) row.outerHTML=sellerInventoryRow(food);
+}
+
+function setSellerOrderFilter(filter){ state.sellerOrderFilter=filter; renderSeller(); }
+
+function advanceSellerOrder(id){
+  const order=sellerOrders.find(item=>item.id===id);
+  if(!order) return;
+  const next={'Paid':'Ready for pickup','Ready for pickup':'Completed'}[order.status];
+  if(next) order.status=next;
+  sellerNotice(`${order.id} is now ${order.status}.`);
+  renderSeller();
+}
+
+function simulateSellerScan(){
+  state.sellerLastScan=sellerOrders.find(order=>order.status==='Ready for pickup')||sellerOrders[0];
+  sellerNotice(`Scanned ${state.sellerLastScan.id}.`);
+  renderSeller();
+}
+
+function confirmSellerPickup(){
+  const order=state.sellerLastScan;
+  if(!order){ sellerNotice('Scan an order first.'); return; }
+  order.status='Completed';
+  sellerNotice(`${order.id} marked as collected.`);
+  renderSeller();
+}
+
+function saveSellerProfile(){
+  const value=id=>document.getElementById(id)?.value.trim()||'';
+  state.sellerProfile={name:value('seller-profile-name'),type:value('seller-profile-type'),address:value('seller-profile-address'),hours:value('seller-profile-hours'),phone:value('seller-profile-phone')};
+  sellerNotice('Business profile saved.');
+  renderSeller();
+}
 
 function sHeader(title, sub){
   return `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:22px;">
@@ -67,7 +152,7 @@ function sellerDashboard(){
       <h3 style="font-size:14px;">Smart pricing suggestion</h3>
       <div style="display:flex; align-items:center; gap:8px; margin-top:10px;"><span class="pill pill-sky">${icon('bolt',11,'var(--sky)')} AI insight</span></div>
       <p style="font-size:12.5px; color:var(--ink-soft); margin-top:10px; line-height:1.55;">Green Curry Set has 2 units left with 1 hour until pickup closes. Demand for this slot is typically low — consider an extra 10% discount to clear stock.</p>
-      <button class="btn btn-mint btn-sm" style="margin-top:12px; width:100%;" onclick="alert('Applied additional 10% discount to Green Curry Set')">Apply suggested discount</button>
+      <button class="btn btn-mint btn-sm" style="margin-top:12px; width:100%;" onclick="applySellerDiscount()">Apply suggested discount</button>
     </div>
   </div>
   <div class="card" style="margin-top:16px; padding:18px;">
@@ -112,11 +197,11 @@ function sellerUpload(){
         ${icon('camera',24,'var(--ink-soft)')}<span style="font-size:11.5px;">Upload photo or choose an illustration</span>
       </div>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-        <div><label>Food name</label><input placeholder="e.g. Roast Chicken Rice Box"></div>
+        <div><label>Food name</label><input id="seller-food-name" placeholder="e.g. Roast Chicken Rice Box"></div>
         <div><label>Category</label><select><option>Meals</option><option>Bakery</option><option>Café</option><option>Grocery</option><option>Hotel</option><option>Healthy Food</option></select></div>
         <div><label>Original price (฿)</label><input placeholder="180"></div>
-        <div><label>Discounted price (฿)</label><input placeholder="69"></div>
-        <div><label>Quantity available</label><input placeholder="6"></div>
+        <div><label>Discounted price (฿)</label><input id="seller-food-price" type="number" placeholder="69"></div>
+        <div><label>Quantity available</label><input id="seller-food-qty" type="number" placeholder="6"></div>
         <div><label>Pickup time window</label><input placeholder="18:30 – 19:30"></div>
       </div>
       <div style="margin-top:12px;"><label>Description</label><input placeholder="Short description customers will see"></div>
@@ -126,7 +211,7 @@ function sellerUpload(){
         <div><label>Prepared at</label><input placeholder="Today, 14:00"></div>
         <div><label>Best before / use by</label><input placeholder="Today, 21:00"></div>
       </div>
-      <button class="btn btn-primary" style="margin-top:18px; width:auto; padding:13px 28px;" onclick="alert('Published! Customers nearby can now see this listing.')">Publish food</button>
+      <button class="btn btn-primary" style="margin-top:18px; width:auto; padding:13px 28px;" onclick="publishSellerFood()">Publish food</button>
     </div>
     <div class="card" style="width:270px; padding:16px;">
       <div style="font-size:12px; font-weight:700; color:var(--ink-soft); margin-bottom:10px;">LIVE PREVIEW</div>
@@ -145,18 +230,7 @@ function sellerInventory(){
       <th style="padding:8px 10px;">Item</th><th>Available</th><th>Sold</th><th>Status</th><th>Price</th><th></th>
     </tr></thead>
     <tbody>
-    ${sellerFoods.map(f=>`
-      <tr style="background:#fff;">
-        <td style="padding:12px 10px; border-radius:12px 0 0 12px; display:flex; align-items:center; gap:10px;">
-          <div class="foodthumb" style="background:${f.grad}; width:38px;height:38px;border-radius:9px; font-size:16px;">${f.emoji}</div>
-          <span style="font-size:12.5px; font-weight:700;">${f.name}</span>
-        </td>
-        <td style="font-size:12.5px;">${f.qty}</td>
-        <td style="font-size:12.5px;">${f.sold}</td>
-        <td><span class="pill ${{Available:'pill-mint','Low Stock':'pill-amber','Sold Out':'pill-coral',Expired:'pill-coral'}[f.status]}">${f.status}</span></td>
-        <td style="font-size:12.5px; font-weight:700;">${money(f.price)}</td>
-        <td style="border-radius:0 12px 12px 0;"><button class="btn-sm" style="border:1px solid var(--line); background:#fff;">Edit</button></td>
-      </tr>
+    ${sellerFoods.map(f=>`${sellerInventoryRow(f)}
       <tr><td colspan="6" style="height:8px;"></td></tr>
     `).join('')}
     </tbody>
@@ -164,15 +238,30 @@ function sellerInventory(){
   `;
 }
 
+function sellerInventoryRow(f){
+  return `<tr id="seller-food-row-${f.id}" style="background:#fff;">
+        <td style="padding:12px 10px; border-radius:12px 0 0 12px; display:flex; align-items:center; gap:10px;">
+          <div class="foodthumb" style="background:${f.grad}; width:38px;height:38px;border-radius:9px; font-size:16px;">${f.emoji}</div>
+          <span style="font-size:12.5px; font-weight:700;">${f.name}</span>
+        </td>
+        <td style="font-size:12.5px;">${state.sellerEditingFoodId===f.id?`<input id="seller-edit-qty-${f.id}" type="number" min="0" step="1" value="${f.qty}" style="width:72px;">`:f.qty}</td>
+        <td style="font-size:12.5px;">${f.sold}</td>
+        <td><span class="pill ${{Available:'pill-mint','Low Stock':'pill-amber','Sold Out':'pill-coral',Expired:'pill-coral'}[f.status]}">${f.status}</span></td>
+        <td style="font-size:12.5px; font-weight:700;">${money(f.price)}</td>
+        <td style="border-radius:0 12px 12px 0;">${state.sellerEditingFoodId===f.id?`<button class="btn-sm" style="border:1px solid var(--forest);background:var(--forest);color:#fff;" onclick="saveEditSellerFood(${f.id})">Save</button><button class="btn-sm" style="border:1px solid var(--line);background:#fff;margin-left:5px;" onclick="cancelEditSellerFood()">Cancel</button>`:`<button class="btn-sm" style="border:1px solid var(--line); background:#fff;" onclick="editSellerFood(${f.id})">Edit</button>`}</td>
+      </tr>`;
+}
+
 function sellerOrdersScreen(){
   const tabs = ['All','New','Paid','Ready for pickup','Completed'];
+  const orders=state.sellerOrderFilter==='All'?sellerOrders:sellerOrders.filter(order=>order.status===state.sellerOrderFilter);
   return `
   ${sHeader('Orders','Track every order from payment to pickup.')}
   <div style="display:flex; gap:8px; margin-bottom:14px;">
-    ${tabs.map((t,i)=>`<button class="btn-sm" style="border:1px solid var(--line); background:${i===0?'var(--forest)':'#fff'}; color:${i===0?'#fff':'var(--ink)'};">${t}</button>`).join('')}
+    ${tabs.map(t=>`<button class="btn-sm" onclick="setSellerOrderFilter('${t}')" style="border:1px solid var(--line); background:${state.sellerOrderFilter===t?'var(--forest)':'#fff'}; color:${state.sellerOrderFilter===t?'#fff':'var(--ink)'};">${t}</button>`).join('')}
   </div>
   <div style="display:flex; flex-direction:column; gap:10px;">
-    ${sellerOrders.map(o=>`
+    ${orders.map(o=>`
     <div class="card" style="padding:14px 16px; display:flex; align-items:center; justify-content:space-between;">
       <div>
         <div style="font-size:13px; font-weight:700;">${o.id}</div>
@@ -181,6 +270,7 @@ function sellerOrdersScreen(){
       <div style="display:flex; align-items:center; gap:14px;">
         <span style="font-weight:700; font-size:13px;">${money(o.total)}</span>
         <span class="pill ${{'Ready for pickup':'pill-amber','Paid':'pill-sky','Completed':'pill-mint','New':'pill-coral'}[o.status]}">${o.status}</span>
+        ${o.status!=='Completed'?`<button class="btn-sm" onclick="advanceSellerOrder('${o.id}')" style="border:1px solid var(--line);background:#fff;">Update</button>`:''}
       </div>
     </div>`).join('')}
   </div>
@@ -196,15 +286,15 @@ function sellerScanner(){
         ${icon('scan',52,'var(--forest)')}
       </div>
       <p style="font-size:12px; color:var(--ink-soft); margin-top:16px;">Point the camera at the customer's QR code</p>
-      <button class="btn btn-primary" style="margin-top:14px; width:auto; padding:12px 26px;" onclick="alert('Order #SFR-88213 verified — mark as collected.')">Simulate scan</button>
+      <button class="btn btn-primary" style="margin-top:14px; width:auto; padding:12px 26px;" onclick="simulateSellerScan()">Simulate scan</button>
     </div>
     <div class="card" style="width:300px; padding:18px;">
       <div style="font-size:12px; font-weight:700; color:var(--ink-soft);">LAST SCANNED ORDER</div>
-      <div style="margin-top:12px; font-size:15px; font-weight:800;">#SFR-88213</div>
-      <div style="font-size:12px; color:var(--ink-soft); margin-top:3px;">Nara S. · Roast Chicken Rice Box ×1</div>
+      <div style="margin-top:12px; font-size:15px; font-weight:800;">#${state.sellerLastScan?.id||'—'}</div>
+      <div style="font-size:12px; color:var(--ink-soft); margin-top:3px;">${state.sellerLastScan?`${state.sellerLastScan.customer} · ${state.sellerLastScan.item}`:'No order scanned yet'}</div>
       <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:12.5px;"><span style="color:var(--ink-soft);">Payment</span><span class="pill pill-mint">Paid</span></div>
-      <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:12.5px;"><span style="color:var(--ink-soft);">Pickup status</span><span class="pill pill-amber">Pending</span></div>
-      <button class="btn btn-primary btn-sm" style="width:100%; margin-top:16px;" onclick="alert('Marked as collected. Nice work!')">Confirm pickup</button>
+      <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:12.5px;"><span style="color:var(--ink-soft);">Pickup status</span><span class="pill pill-amber">${state.sellerLastScan?.status||'Pending'}</span></div>
+      <button class="btn btn-primary btn-sm" style="width:100%; margin-top:16px;" onclick="confirmSellerPickup()">Confirm pickup</button>
     </div>
   </div>
   `;
@@ -240,18 +330,19 @@ function sellerAnalytics(){
 }
 
 function sellerProfile(){
+  const profile=state.sellerProfile;
   return `
   ${sHeader('Business profile')}
   <div style="display:flex; gap:18px;">
     <div class="card" style="flex:1; padding:20px;">
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-        <div><label>Business name</label><input value="Golden Wok Kitchen"></div>
-        <div><label>Business type</label><select><option>Restaurant</option><option>Café</option><option>Bakery</option><option>Supermarket</option><option>Hotel</option></select></div>
-        <div style="grid-column:1/3;"><label>Address</label><input value="88 Sukhumvit Soi 24, Bangkok"></div>
-        <div><label>Opening hours</label><input value="10:00 – 21:00"></div>
-        <div><label>Contact number</label><input value="+66 2 123 4567"></div>
+        <div><label>Business name</label><input id="seller-profile-name" value="${profile.name}"></div>
+        <div><label>Business type</label><select id="seller-profile-type"><option ${profile.type==='Restaurant'?'selected':''}>Restaurant</option><option ${profile.type==='Café'?'selected':''}>Café</option><option ${profile.type==='Bakery'?'selected':''}>Bakery</option><option ${profile.type==='Supermarket'?'selected':''}>Supermarket</option><option ${profile.type==='Hotel'?'selected':''}>Hotel</option></select></div>
+        <div style="grid-column:1/3;"><label>Address</label><input id="seller-profile-address" value="${profile.address}"></div>
+        <div><label>Opening hours</label><input id="seller-profile-hours" value="${profile.hours}"></div>
+        <div><label>Contact number</label><input id="seller-profile-phone" value="${profile.phone}"></div>
       </div>
-      <button class="btn btn-primary" style="margin-top:18px; width:auto; padding:12px 26px;">Save changes</button>
+      <button class="btn btn-primary" style="margin-top:18px; width:auto; padding:12px 26px;" onclick="saveSellerProfile()">Save changes</button>
     </div>
     <div class="card" style="width:260px; padding:18px; text-align:center;">
       <div style="width:56px;height:56px;border-radius:16px; background:linear-gradient(135deg,var(--forest),var(--mint)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-family:'Sora'; margin:0 auto;">GW</div>

@@ -5,7 +5,44 @@ function changeQty(id, delta, forceAddIfZero){
   if(next<0) next=0;
   state.cart[id]=next;
   if(next===0) delete state.cart[id];
+  if(state.screen==='foodDetail'){
+    const counter=document.getElementById(`food-qty-${id}`);
+    const action=document.getElementById(`food-cart-action-${id}`);
+    if(counter) counter.textContent=String(next);
+    if(action) action.textContent=next?'Go to cart':'Add to cart';
+    return;
+  }
+  if(state.screen==='cart'){
+    if(next===0){
+      renderCustomer(false);
+      return;
+    }
+    const counter=document.getElementById(`cart-qty-${id}`);
+    if(counter) counter.textContent=String(next);
+    updateCartTotals();
+    return;
+  }
   renderCustomer(false);
+}
+
+function updateCartTotals(){
+  const original=cartOriginal();
+  const totalBeforeDiscount=cartTotal();
+  const discount=original-totalBeforeDiscount;
+  const couponDisc=state.couponApplied?20:0;
+  const pointsDisc=state.pointsApplied?15:0;
+  const fee=cartItems().length?5:0;
+  const total=Math.max(totalBeforeDiscount-couponDisc-pointsDisc+fee,0);
+  const values={
+    'cart-original-total':money(original),
+    'cart-discount-total':`-${money(discount)}`,
+    'cart-fee-total':money(fee),
+    'cart-total':money(total),
+  };
+  Object.entries(values).forEach(([id,value])=>{
+    const element=document.getElementById(id);
+    if(element) element.textContent=value;
+  });
 }
 
 function toggleCoupon(){

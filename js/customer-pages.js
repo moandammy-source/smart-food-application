@@ -79,7 +79,7 @@ function screenHome(){
         </div>
       </div>
     </div>
-    <div class="card points-card" style="margin-top:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#ffffff,#f4faf4); border-color:rgba(47,143,93,0.15); box-shadow:0 16px 28px -18px rgba(19,74,52,0.3);">
+    <div class="card points-card" style="margin-top:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
       <span class="points-spark points-spark--1">✦</span>
       <span class="points-spark points-spark--2">✦</span>
       <span class="points-spark points-spark--3">✦</span>
@@ -267,10 +267,10 @@ function screenFoodDetail(){
   <div class="screen-actionbar" style="display:flex; gap:10px; align-items:center;">
     <div style="display:flex; align-items:center; border:1.5px solid var(--line); border-radius:12px;">
       <button onclick="changeQty(${f.id},-1)" style="border:none;background:none;width:36px;height:40px;font-size:16px;">−</button>
-      <span style="width:22px; text-align:center; font-weight:700; font-size:13.5px;">${inCart}</span>
+      <span id="food-qty-${f.id}" style="width:22px; text-align:center; font-weight:700; font-size:13.5px;">${inCart}</span>
       <button onclick="changeQty(${f.id},1)" style="border:none;background:none;width:36px;height:40px;font-size:16px;">+</button>
     </div>
-    <button class="btn btn-primary" style="flex:1;" onclick="changeQty(${f.id}, ${inCart?0:1}, true); go('cart')">${inCart? 'Go to cart' : 'Add to cart'}</button>
+    <button id="food-cart-action-${f.id}" class="btn btn-primary" style="flex:1;" onclick="changeQty(${f.id}, ${inCart?0:1}, true); go('cart')">${inCart? 'Go to cart' : 'Add to cart'}</button>
   </div>
   `;
 }
@@ -291,7 +291,7 @@ function screenCart(){
   <div class="px" style="padding-bottom:200px;">
     ${items.length===0? `<div style="text-align:center; padding:60px 0; color:var(--ink-soft);">${icon('box',34,'var(--ink-soft)')}<div style="margin-top:10px; font-size:13px;">Your cart is empty.</div><button class="btn btn-mint btn-sm" style="margin-top:14px; width:auto; padding:10px 20px;" onclick="go('home')">Browse food</button></div>` :
     items.map(({food,qty})=>`
-      <div class="card" style="display:flex; gap:12px; padding:10px; align-items:center; margin-top:12px;">
+      <div id="cart-row-${food.id}" class="card" style="display:flex; gap:12px; padding:10px; align-items:center; margin-top:12px;">
         <div class="foodthumb" style="background:${food.grad}; width:60px;height:60px;border-radius:12px; overflow:hidden; padding:0;">${foodMedia(food)}</div>
         <div style="flex:1;">
           <div style="font-size:13px; font-weight:700;">${food.name}</div>
@@ -300,7 +300,7 @@ function screenCart(){
         </div>
         <div style="display:flex; align-items:center; border:1.5px solid var(--line); border-radius:10px;">
           <button onclick="changeQty(${food.id},-1)" style="border:none;background:none;width:28px;height:32px;">−</button>
-          <span style="width:18px; text-align:center; font-size:12.5px; font-weight:700;">${qty}</span>
+          <span id="cart-qty-${food.id}" style="width:18px; text-align:center; font-size:12.5px; font-weight:700;">${qty}</span>
           <button onclick="changeQty(${food.id},1)" style="border:none;background:none;width:28px;height:32px;">+</button>
         </div>
       </div>`).join('')}
@@ -318,12 +318,12 @@ function screenCart(){
     </div>
 
     <div class="card" style="margin-top:14px; padding:14px; display:flex; flex-direction:column; gap:8px; font-size:12.5px;">
-      <div style="display:flex; justify-content:space-between;"><span style="color:var(--ink-soft);">Original price</span><span>${money(cartOriginal())}</span></div>
-      <div style="display:flex; justify-content:space-between;"><span style="color:var(--ink-soft);">Rescue discount</span><span style="color:var(--forest);">-${money(disc)}</span></div>
+      <div style="display:flex; justify-content:space-between;"><span style="color:var(--ink-soft);">Original price</span><span id="cart-original-total">${money(cartOriginal())}</span></div>
+      <div style="display:flex; justify-content:space-between;"><span style="color:var(--ink-soft);">Rescue discount</span><span id="cart-discount-total" style="color:var(--forest);">-${money(disc)}</span></div>
       ${state.couponApplied? `<div style="display:flex; justify-content:space-between;"><span style="color:var(--ink-soft);">Coupon SAVE20</span><span style="color:var(--forest);">-${money(couponDisc)}</span></div>`:''}
       ${state.pointsApplied? `<div style="display:flex; justify-content:space-between;"><span style="color:var(--ink-soft);">Reward points</span><span style="color:var(--forest);">-${money(pointsDisc)}</span></div>`:''}
-      <div style="display:flex; justify-content:space-between;"><span style="color:var(--ink-soft);">Service fee</span><span>${money(fee)}</span></div>
-      <div style="border-top:1px dashed var(--line); margin-top:4px; padding-top:8px; display:flex; justify-content:space-between; font-weight:800; font-size:14px;"><span>Total</span><span>${money(total)}</span></div>
+      <div style="display:flex; justify-content:space-between;"><span style="color:var(--ink-soft);">Service fee</span><span id="cart-fee-total">${money(fee)}</span></div>
+      <div style="border-top:1px dashed var(--line); margin-top:4px; padding-top:8px; display:flex; justify-content:space-between; font-weight:800; font-size:14px;"><span>Total</span><span id="cart-total">${money(total)}</span></div>
     </div>` : ''}
   </div>
   ${items.length>0? `<div class="screen-actionbar">
