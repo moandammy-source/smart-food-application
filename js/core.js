@@ -64,6 +64,7 @@ let state = {
   cart:{}, // id -> qty
   couponApplied:false,
   pointsApplied:false,
+  paymentMethod:'QR PromptPay',
   selectedFoodId:null,
   searchQuery:'',
   searchDraft:'',

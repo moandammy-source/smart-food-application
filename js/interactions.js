@@ -55,6 +55,11 @@ function togglePoints(){
   renderCustomer(false);
 }
 
+function selectPaymentMethod(method){
+  state.paymentMethod=method;
+  renderCustomer(false);
+}
+
 let searchTimer;
 let searchLoadingTimer;
 
@@ -196,6 +201,7 @@ function startPayment(){
     orderId:`SFR-${Date.now().toString().slice(-8)}`,
     items:cartItems().map(({food,qty})=>({id:food.id,name:food.name,qty,price:food.price})),
     total:Math.max(cartTotal()-(state.couponApplied?20:0)-(state.pointsApplied?15:0)+5,0),
+    paymentMethod:state.paymentMethod,
     pickup:'Today, 18:30–19:30',
     location:'Golden Wok Kitchen',
     pickupLocation:state.pickupLocationConfirmed?state.pickupLocation:null

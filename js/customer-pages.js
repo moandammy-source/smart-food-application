@@ -371,11 +371,13 @@ function screenCheckout(){
 
     <label style="margin-top:18px;">Payment method</label>
     <div style="display:flex; flex-direction:column; gap:8px;">
-      ${['QR PromptPay','Credit / Debit card','Mobile banking','In-app wallet · ฿320.00'].map((m,i)=>`
-      <div class="card clickable" style="padding:12px 14px; display:flex; align-items:center; gap:10px; ${i===0?'border-color:var(--forest); border-width:2px;':''}">
-        <div style="width:16px;height:16px;border-radius:50%; border:2px solid ${i===0?'var(--forest)':'var(--line)'}; display:flex; align-items:center; justify-content:center;">${i===0?'<div style="width:8px;height:8px;border-radius:50%;background:var(--forest);"></div>':''}</div>
+      ${['QR PromptPay','Credit / Debit card','Mobile banking','In-app wallet · ฿320.00'].map(m=>{
+        const selected=state.paymentMethod===m;
+        return `<button type="button" class="card clickable payment-method-option" onclick="selectPaymentMethod('${m}')" style="padding:12px 14px; display:flex; align-items:center; gap:10px; text-align:left; ${selected?'border-color:var(--forest); border-width:2px;':''}">
+        <span style="width:16px;height:16px;border-radius:50%; border:2px solid ${selected?'var(--forest)':'var(--line)'}; display:flex; align-items:center; justify-content:center; flex:0 0 auto;">${selected?'<span style="width:8px;height:8px;border-radius:50%;background:var(--forest);"></span>':''}</span>
         <span style="font-size:13px; font-weight:600;">${m}</span>
-      </div>`).join('')}
+      </button>`;
+      }).join('')}
     </div>
 
     <div class="card" style="margin-top:18px; padding:14px; display:flex; justify-content:space-between; font-weight:800; font-size:14px;">
