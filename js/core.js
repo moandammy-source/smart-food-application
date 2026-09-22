@@ -73,6 +73,8 @@ let state = {
   filters:{dietary:'All', maxDistance:'Any'},
   favorites:{},
   orderData:null,
+  pickupLocationConfirmed:false,
+  pickupLocation:null,
   sellerScreen:'dashboard',
   uploadStep:0,
   donationData:null,
@@ -106,6 +108,19 @@ function go(screen, extra){
   if(extra) Object.assign(state, extra);
   renderCustomer();
   document.getElementById('customer-screen').scrollTop=0;
+}
+
+function savePickupLocation(location){
+  state.pickupLocation=location;
+  state.pickupLocationConfirmed=true;
+  try{ localStorage.setItem('smart-food-pickup-location',JSON.stringify(location)); }catch(error){}
+}
+
+function loadPickupLocation(){
+  try{
+    const saved=JSON.parse(localStorage.getItem('smart-food-pickup-location')||'null');
+    if(saved?.lat && saved?.lng){ state.pickupLocation=saved; state.pickupLocationConfirmed=true; }
+  }catch(error){}
 }
 
 /* ============ CUSTOMER RENDER ============ */

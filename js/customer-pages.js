@@ -211,23 +211,7 @@ function searchSkeleton(){
   </div>`;
 }
 function searchMap(list){
-  const pins = list.map((f,i)=>{
-    const x = 40 + (i*57)%300, y = 60+((i*97)%400);
-    return `<div class="clickable" onclick="go('foodDetail',{selectedFoodId:${f.id}})" style="position:absolute; left:${x}px; top:${y}px; display:flex; flex-direction:column; align-items:center;">
-      <div style="background:var(--forest); color:#fff; font-size:11px; font-weight:700; padding:4px 8px; border-radius:8px; white-space:nowrap; box-shadow:var(--shadow);">${money(f.price)}</div>
-      <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--forest);"></div>
-    </div>`;
-  }).join('');
-  return `<div style="position:relative; height:470px; margin:14px 20px 0; border-radius:16px; overflow:hidden; background:
-    linear-gradient(180deg,#DCEAE0,#CFE3D6);
-    background-image:
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.5) 0 1px, transparent 1px 40px),
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.5) 0 1px, transparent 1px 40px);
-    border:1px solid var(--line);">
-    <div style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:50%; background:var(--sky); border:3px solid #fff; box-shadow:0 0 0 6px rgba(44,123,168,0.25);"></div>
-    ${pins}
-    <div style="position:absolute; bottom:10px; left:10px; background:#fff; padding:6px 10px; border-radius:9px; font-size:10.5px; color:var(--ink-soft); box-shadow:var(--shadow);">Illustrative map view</div>
-  </div>`;
+  return `<div id="food-search-map" class="food-search-map" aria-label="Food pickup locations map"></div>`;
 }
 
 /* ---- Food detail ---- */
@@ -350,6 +334,7 @@ function screenCart(){
 
 /* ---- Checkout ---- */
 function screenCheckout(){
+  const pickup=state.pickupLocation;
   return `
   ${header('Checkout', "go('cart')")}
   <div class="px">
@@ -366,6 +351,22 @@ function screenCheckout(){
     <label style="margin-top:18px;">Pickup time</label>
     <div class="card" style="padding:12px; display:flex; align-items:center; gap:8px;">
       ${icon('clock',17,'var(--forest)')}<span style="font-size:13px; font-weight:600;">Today, 18:30 – 19:30</span>
+    </div>
+
+    <div class="card pickup-location-card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px;">
+        <div><label style="margin:0;">Local pick-up location</label><div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">Tap the map to choose where you will collect your order.</div></div>
+        <span class="pill pill-mint">OpenStreetMap</span>
+      </div>
+      <div id="pickup-map" class="pickup-map" aria-label="Map for selecting a local pick-up location"></div>
+      <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+        <button class="btn btn-mint btn-sm" type="button" onclick="useCurrentLocation()">${icon('map',14,'var(--forest)')} Use my current location</button>
+      </div>
+      <div class="pickup-address" style="margin-top:10px;">
+        ${icon('map',16,'var(--forest)')}
+        <div><strong>${pickup?(state.pickupLocationConfirmed?'Selected pick-up point':'Confirm this pick-up point'):'No pick-up point selected'}</strong>${pickup?escapeHtml(pickup.address||formatCoordinates(pickup.lat,pickup.lng)):'Select a point on the map to continue.'}</div>
+      </div>
+      <button class="btn btn-primary btn-sm" type="button" style="margin-top:10px;" onclick="confirmPickupLocation()" ${pickup?'':'disabled'}>Confirm pick-up location</button>
     </div>
 
     <label style="margin-top:18px;">Payment method</label>
@@ -417,7 +418,7 @@ function screenConfirmation(){
 
     <div class="card" style="margin-top:14px; padding:14px; text-align:left; display:flex; flex-direction:column; gap:8px;">
       ${items.map(({food,qty})=>`<div style="display:flex; justify-content:space-between; font-size:12.5px;"><span>${qty}× ${food.name}</span><span style="color:var(--ink-soft);">${food.store}</span></div>`).join('') || `<div style="font-size:12.5px;">1× ${first.name}</div>`}
-      <div style="border-top:1px dashed var(--line); padding-top:8px; display:flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-soft);">${icon('clock',14)} Pickup today, 18:30–19:30 · ${first.store}</div>
+      <div style="border-top:1px dashed var(--line); padding-top:8px; display:flex; align-items:flex-start; gap:7px; font-size:12.5px; color:var(--ink-soft);">${icon('clock',14)} <span>Pickup today, 18:30–19:30 · ${first.store}${state.orderData?.pickupLocation?`<br><strong style="color:var(--ink);">Pick-up point:</strong> ${escapeHtml(state.orderData.pickupLocation.address||formatCoordinates(state.orderData.pickupLocation.lat,state.orderData.pickupLocation.lng))}`:''}</span></div>
     </div>
     <div class="card" style="margin-top:14px; padding:13px; background:${state.orderPoints>0?'var(--mint-light)':'var(--amber-light)'}; color:${state.orderPoints>0?'var(--forest)':'#8A5D18'}; font-size:13px; font-weight:700;">${state.orderPoints>0?`Order received! You earned ${state.orderPoints} points.`:'Order received. Points could not be added yet.'}</div>
 
@@ -442,6 +443,7 @@ function screenTracking(){
         </div>
         <span class="pill pill-amber">${icon('clock',11,'#8A5D18')} Ready for pickup</span>
       </div>
+      ${state.orderData?.pickupLocation?`<div class="card" style="margin-top:14px; padding:11px; background:var(--mint-light); font-size:12px; color:var(--forest);"><strong>Pick-up point</strong><div style="margin-top:3px; color:var(--ink-soft);">${escapeHtml(state.orderData.pickupLocation.address||formatCoordinates(state.orderData.pickupLocation.lat,state.orderData.pickupLocation.lng))}</div></div>`:''}
       <div style="margin-top:18px; display:flex; flex-direction:column; gap:0;">
         ${steps.map((s,i)=>`
         <div style="display:flex; gap:12px;">

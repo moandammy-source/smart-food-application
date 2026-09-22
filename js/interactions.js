@@ -160,10 +160,86 @@ function startPayment(){
     items:cartItems().map(({food,qty})=>({id:food.id,name:food.name,qty,price:food.price})),
     total:Math.max(cartTotal()-(state.couponApplied?20:0)-(state.pointsApplied?15:0)+5,0),
     pickup:'Today, 18:30–19:30',
-    location:'Golden Wok Kitchen'
+    location:'Golden Wok Kitchen',
+    pickupLocation:state.pickupLocationConfirmed?state.pickupLocation:null
   };
   state.orderPoints=null;
   go('payment');
+}
+
+function escapeHtml(value){
+  return String(value||'').replace(/[&<>'"]/g,character=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
+}
+
+function formatCoordinates(lat,lng){
+  return `${Number(lat).toFixed(5)}, ${Number(lng).toFixed(5)}`;
+}
+
+let pickupMap;
+let pickupMarker;
+let pickupAddressRequest=0;
+let foodSearchMap;
+
+function initPickupMap(){
+  const target=document.getElementById('pickup-map');
+  if(!target || typeof L==='undefined') return;
+  if(pickupMap){ pickupMap.remove(); pickupMap=null; pickupMarker=null; }
+  const saved=state.pickupLocation;
+  const center=saved?[saved.lat,saved.lng]:[13.7563,100.5018];
+  pickupMap=L.map(target,{scrollWheelZoom:false}).setView(center,saved?16:13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(pickupMap);
+  if(saved) pickupMarker=L.marker(center).addTo(pickupMap);
+  pickupMap.on('click',event=>selectPickupLocation(event.latlng.lat,event.latlng.lng));
+  setTimeout(()=>pickupMap.invalidateSize(),0);
+}
+
+function initFoodSearchMap(){
+  const target=document.getElementById('food-search-map');
+  if(!target || typeof L==='undefined') return;
+  if(foodSearchMap){ foodSearchMap.remove(); foodSearchMap=null; }
+  foodSearchMap=L.map(target,{scrollWheelZoom:false}).setView([13.7563,100.5018],13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(foodSearchMap);
+  foods.forEach((food,index)=>{
+    const lat=13.7563+((index%3)-1)*0.012+(Math.floor(index/3)*0.004);
+    const lng=100.5018+((index%4)-1.5)*0.014;
+    L.marker([lat,lng]).addTo(foodSearchMap).bindPopup(`<strong>${escapeHtml(food.name)}</strong><br>${escapeHtml(food.store)}<br><b>${money(food.price)}</b><br><button class="map-food-link" onclick="go('foodDetail',{selectedFoodId:${food.id}})">View food</button>`);
+  });
+  setTimeout(()=>foodSearchMap.invalidateSize(),0);
+}
+
+async function selectPickupLocation(lat,lng){
+  if(!pickupMap) return;
+  if(pickupMarker) pickupMarker.setLatLng([lat,lng]);
+  else pickupMarker=L.marker([lat,lng]).addTo(pickupMap);
+  state.pickupLocation={lat,lng,address:'Loading address...'};
+  state.pickupLocationConfirmed=false;
+  renderCustomer(false);
+  const requestId=++pickupAddressRequest;
+  try{
+    const response=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}`);
+    const data=await response.json();
+    if(requestId===pickupAddressRequest) state.pickupLocation={lat,lng,address:data.display_name||formatCoordinates(lat,lng)};
+  }catch(error){
+    if(requestId===pickupAddressRequest) state.pickupLocation={lat,lng,address:formatCoordinates(lat,lng)};
+  }
+  if(requestId===pickupAddressRequest) renderCustomer(false);
+}
+
+function useCurrentLocation(){
+  if(!navigator.geolocation){ showSnackbar('Location is not available in this browser.'); return; }
+  showSnackbar('Requesting your location...');
+  navigator.geolocation.getCurrentPosition(
+    position=>{ const {latitude,longitude}=position.coords; if(pickupMap) pickupMap.setView([latitude,longitude],16); selectPickupLocation(latitude,longitude); },
+    ()=>showSnackbar('We could not access your location. Choose a point on the map instead.'),
+    {enableHighAccuracy:true,timeout:10000}
+  );
+}
+
+function confirmPickupLocation(){
+  if(!state.pickupLocation || state.pickupLocation.address==='Loading address...') return;
+  savePickupLocation(state.pickupLocation);
+  showSnackbar('Pick-up location saved.');
+  renderCustomer(false);
 }
 
 async function completeOrderPayment(){
